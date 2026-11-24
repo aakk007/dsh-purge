@@ -52,7 +52,7 @@ test('DSH Go 启动策略：识别宿主、安装、重复启动、回滚，主�
   assert.equal(ensureDshGoCompat({ ...args, platform: 'win32' }).state, 'not-dsh-go');
   assert.equal(ensureDshGoCompat({ ...args, mode: 'off' }).state, 'disabled');
   assert.deepEqual(readFileSync(f.manifest), original);
-  assert.equal(ensureDshGoCompat(args).restartRequired, true);
+  assert.equal(ensureDshGoCompat(args).liveResolution, true);
   assert.equal(ensureDshGoCompat(args).state, 'unchanged');
   assert.equal(installCompat(f.dir, { check: true }).state, 'installed');
   assert.deepEqual(readFileSync(join(f.pkg, 'lib/index.js')), main);
@@ -60,6 +60,34 @@ test('DSH Go 启动策略：识别宿主、安装、重复启动、回滚，主�
   assert.deepEqual(readFileSync(f.manifest), original);
   assert.deepEqual(readFileSync(`${f.manifest}.dsh-go-list-agents-original`), original);
   assert.equal(existsSync(join(f.pkg, 'lib/dsh-go-list-agents-compat.mjs')), false);
+});
+
+test('Direct 默认启动路径使用宿主适配器，保留原预设并可回滚', options, t => {
+  const f = fixture(t);
+  const marker = join(f.dir, 'bridge-package.json');
+  writeFileSync(marker, '{}');
+  const key = Symbol.for('dsh.go.direct');
+  const previous = globalThis[key];
+  const mapped = [];
+  globalThis[key] = {
+    toHost(path) {
+      mapped.push(path);
+      if (path === '/opt/dsh') return f.dir;
+      if (path === '/opt/dsh-go/dsh-go-bridge/package.json') return marker;
+      return path;
+    },
+  };
+  t.after(() => {
+    if (previous === undefined) delete globalThis[key];
+    else globalThis[key] = previous;
+  });
+  const original = readFileSync(f.manifest);
+  // 不注入 prefix/marker，覆盖之前测试遗漏的真实默认启动入口。
+  assert.equal(ensureDshGoCompat({ platform: 'linux' }).state, 'installed');
+  assert.deepEqual(mapped, ['/opt/dsh', '/opt/dsh-go/dsh-go-bridge/package.json']);
+  assert.equal(ensureDshGoCompat({ platform: 'linux' }).state, 'unchanged');
+  assert.equal(ensureDshGoCompat({ platform: 'linux', mode: 'restore' }).state, 'restored');
+  assert.deepEqual(readFileSync(f.manifest), original);
 });
 
 test('未知版本跳过，未知字节和冲突入口不覆盖', options, t => {
@@ -93,6 +121,68 @@ test('CLI 安装、全新进程解析和 CLI 回滚', options, t => {
   assert.match(run('--input-type=module', '-e', code), /dsh-go-list-agents-compat\.mjs/);
   assert.equal(JSON.parse(run(installer, '--prefix', f.dir, '--restore')).state, 'restored');
   assert.equal(JSON.parse(run(installer, '--prefix', f.dir, '--check')).state, 'needs-update');
+});
+
+test('官方预设注册器：复现 never started，补盘后缓存仍失败，热修后原入口可用', options, async t => {
+  const f = fixture(t);
+  const load = name => import(pathToFileURL(f.require.resolve(name)).href);
+  const [{ Context }, { Loader }, { ToolsService }, { AgentPresetRegistry }] = await Promise.all([
+    load('@deepseek-ai/cordis'), load('@deepseek-ai/cordis-plugin-loader'),
+    load('@deepseek-ai/dsh-tools'), load('@deepseek-ai/dsh-agent-preset-registry'),
+  ]);
+  const ctx = new Context();
+  ctx.baseUrl = pathToFileURL(join(f.dir, 'package.json')).href;
+  t.after(() => ctx.fiber.dispose());
+  ctx.provide('systemPrompt', { tools: () => () => {} });
+  ctx.provide('subagents', { async listChildren() { return []; } });
+  ctx.provide('agents', new Map());
+  ctx.provide('sessionProjections', { register: async () => ({}) });
+  await ctx.plugin(ToolsService);
+  await ctx.plugin(Loader, { baseUrl: pathToFileURL(join(f.dir, 'package.json')).href });
+  if (process.execArgv.includes('--expose-internals')) assert.ok(ctx.loader.internal);
+  await ctx.plugin(AgentPresetRegistry, { default: 'redteam' });
+  const registry = ctx.get('agentPresets');
+  const definition = { id: 'redteam', name: '红队模式', plugins: controlRows() };
+  const original = structuredClone(definition);
+  let unregister = await registry.register(definition);
+  const expectedFailure = `tool-subagent-list-agents (${packageName}/list-agents): never started`;
+  assert.equal((await registry.list())[0].broken, expectedFailure);
+  await unregister();
+  installCompat(f.dir);
+  unregister = await registry.register(definition);
+  assert.equal((await registry.list())[0].broken, expectedFailure);
+  await unregister();
+
+  const marker = join(f.dir, 'bridge-package.json');
+  writeFileSync(marker, '{}');
+  const args = { prefix: f.dir, marker, platform: 'linux' };
+  const result = ensureDshGoCompat(args);
+  try {
+    assert.equal(result.liveResolution, true);
+    assert.equal(result.restartRequired, false);
+    unregister = await registry.register(definition);
+    assert.equal((await registry.list())[0].broken, undefined);
+    const generation = [...registry.generations.values()][0];
+    const tools = generation.scope.ctx.get('tools');
+    assert.deepEqual(tools.definitions(generation.key).map(tool => tool.name).sort(),
+      ['interrupt_agent', 'list_agents', 'send_message']);
+    assert.deepEqual(await tools.get('list_agents', generation.key).execute({}, { agent: { id: 'parent' } }), []);
+    assert.deepEqual(definition, original);
+    await unregister();
+
+    // 补丁只作用于已核验宿主，不给另一份未修补包伪造导出。
+    const other = fixture(t);
+    assert.throws(() => other.require.resolve(`${packageName}/list-agents`),
+      { code: 'ERR_PACKAGE_PATH_NOT_EXPORTED' });
+    const standalone = fixture(t);
+    const metadata = JSON.parse(readFileSync(standalone.manifest));
+    metadata.exports = { './list-agents': './lib/index.js' };
+    writeFileSync(standalone.manifest, JSON.stringify(metadata));
+    assert.equal(standalone.require.resolve(`${packageName}/list-agents`),
+      join(standalone.pkg, 'lib/index.js'));
+  } finally {
+    ensureDshGoCompat({ ...args, mode: 'restore' });
+  }
 });
 
 for (const legacyFirst of [false, true]) {

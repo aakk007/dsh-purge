@@ -1,3 +1,21 @@
+# 1.1.72-dshgo.3
+
+## 中文
+
+- 修正上一版在 DSH Go Direct 模式下使用 `/opt` 原始路径、误判 `not-dsh-go` 而跳过补丁的问题。现在通过宿主提供的路径适配器定位实际 rootfs；PRoot 路径保持可用。
+- 恢复宿主 `/list-agents` 导出的同时，为已验证的宿主包安装当前进程解析兼容。实测旧预设先失败时，仅写清单仍会被 Node 缓存阻挡；新解析兼容让同一进程重新注册原预设成功。
+- 保留原预设及主控制插件实现；不重复注册 `list_agents`。回滚撤销解析兼容并恢复清单，仍须重启以清除已经加载的模块。
+- `preset-declare.json` 记录插件版本、运行模式及解析兼容状态，帮助区分旧插件未更新和实际补丁失败。
+- 9 项兼容测试、2 项官方市场选版测试通过。新增官方预设注册器的失败→修复→工具调用测试，覆盖普通及内部 Loader。手机实际加载仍待用户验证。
+
+## English
+
+- Fix Direct engine detection: map guest `/opt` paths through the host adapter instead of silently skipping the patch. PRoot paths remain supported.
+- Restore the on-disk `/list-agents` export and live resolution for the verified host package. The real preset registry reproduces the cached failure after a disk-only repair, then loads the unchanged preset successfully with the new resolver.
+- Preserve the preset and main control implementation without duplicate tools. Restore removes the resolver and restores the manifest; restart to discard already loaded modules.
+- Diagnostics now include the plugin version, runtime mode and live resolver state.
+- Nine compatibility tests and two official market selection tests passed. Device acceptance remains pending.
+
 # 1.1.72-dshgo.2
 
 ## 中文
