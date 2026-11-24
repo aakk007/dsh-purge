@@ -1,3 +1,21 @@
+# 1.1.72-dshgo.2
+
+## 中文
+
+- DSH Go 1.3.0 手机验证版，内置 DSH 0.2.2-rc.1；本地兼容测试通过，真机加载待验证。
+- 插件启动时在已识别的 Android DSH Go 运行环境中，备份宿主控制包清单并补回 `/list-agents` 导出。旧预设保持原样，主控制插件继续负责工具注册。
+- 更新插件并启动后，再重启一次内置引擎，避免 Node 沿用旧的包导出缓存。
+- 自定义插件源固定到本次修复提交；本分支下载地址不再指向原作者旧包。
+- 7 项测试覆盖真实 Loader、工具调用、两种加载顺序、幂等安装及宿主回滚。回滚必须先恢复宿主备份，仅降级插件不会自动撤销宿主补丁。详细说明见 `docs/dsh-go-compat.md`。
+
+## English
+
+- Mobile validation build for DSH Go 1.3.0 / embedded DSH 0.2.2-rc.1. Local tests passed; device validation is pending.
+- On startup in the recognized Android DSH Go runtime, back up the host control-package manifest and restore the legacy `/list-agents` export. Existing presets remain unchanged; the main control plugin owns tool registration.
+- Restart the embedded engine once after the updated plugin starts, to clear cached package exports.
+- The custom plugin index pins the fix commit; fork installation metadata points to this release.
+- Seven tests cover real Loader/tool execution, both loading orders, idempotence and host rollback. Restore the host backup before downgrading; downgrading alone does not undo the host patch. See `docs/dsh-go-compat.md`.
+
 # 1.1.71
 
 ## 中文
