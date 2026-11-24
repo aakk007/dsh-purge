@@ -12,6 +12,8 @@
 
 不需要删除或重建原预设，不需要安装新 APK。不要使用原作者 npm 包或原作者仓库的旧下载地址来获取这次修复。
 
+发现页的选版规则优先选择稳定版：若索引同时列出旧版 `1.1.71`，会默认展示它而非 `1.1.72-dshgo.2`。当前安装索引仅列修复版，旧版通过 GitHub 回滚标签保留。2026-11-24 已使用官方 `dsh-plugin-market@0.2.2-rc.1` 的实际选版函数复现旧行为，并验证新索引默认选择修复版。
+
 ## 修改范围
 
 仅在 Linux 且存在 DSH Go 标识 `/opt/dsh-go/dsh-go-bridge/package.json` 时，检查 `/opt/dsh/node_modules/@deepseek-ai/dsh-tool-subagent-control`。只接受经验证的 `0.2.2-rc.1` 清单原始／补丁后摘要，未知版本跳过，未知内容报错并不覆盖。
@@ -50,6 +52,8 @@ DSH_TEST_PREFIX=/absolute/pristine-npm-prefix npm run test:host-compat
 ## English
 
 Refresh this fork's custom plugin index, update to `1.1.72-dshgo.2`, let the plugin start, then restart the embedded engine once more. Open the existing red-team preset to verify it loads. No preset recreation or APK replacement is required.
+
+The Web Discover page prefers stable versions. Listing the old stable `1.1.71` alongside the fix made it select the old version. The installation index now lists only the fix; the baseline remains available through its GitHub rollback tag. Regression tests run the official `0.2.2-rc.1` selection function.
 
 The startup hook only targets the recognized Android DSH Go Linux runtime and the pinned `0.2.2-rc.1` control package. It restores the host export, retaining both existing preset rows. The main control plugin continues to own all three tools; the compatibility entry does not duplicate registration.
 

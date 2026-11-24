@@ -22,15 +22,6 @@
             "url": "https://github.com/aakk007/dsh-purge.git",
             "commit": "a211767dc2c7cfdb13e53f53fa194c91008cee05"
           }
-        },
-        {
-          "version": "1.1.71",
-          "publishTimestamp": 1791869432,
-          "source": {
-            "type": "git",
-            "url": "https://github.com/aakk007/dsh-purge.git",
-            "commit": "033e6bd1e0f101352b39075ecd0d758ffef26b76"
-          }
         }
       ]
     }
