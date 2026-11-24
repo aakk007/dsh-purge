@@ -4,9 +4,9 @@
 
 <h1 align="center">⚔️ DeepSeek Harness cybersecurity red-team tool (dsh-purge)</h1>
 
-<p align="center"><strong>Version 1.1.72-dshgo.3</strong></p>
+<p align="center"><strong>Version 1.1.72-dshgo.4</strong></p>
 
-> **DSH Go 1.3.0 mobile validation build (aakk007 fork):** refresh this fork's [plugin index](https://raw.githubusercontent.com/aakk007/dsh-purge/master/index.json) and update, or download the [fork release](https://github.com/aakk007/dsh-purge/releases/tag/v1.1.72-dshgo.3). Start the updated plugin; restart the engine if the old plugin is still running. This build fixes Direct engine path detection and stale export resolution in the running process. It backs up the host manifest and restores `/list-agents`, preserving existing presets. Local compatibility tests passed; phone validation remains pending. See [installation and rollback](docs/dsh-go-compat.md). The original npm/upstream links below do not contain this fork's fix.
+> **DSH Go 1.3.0 mobile validation build (aakk007 fork):** refresh this fork's [plugin index](https://raw.githubusercontent.com/aakk007/dsh-purge/master/index.json) and update, or download the [fork release](https://github.com/aakk007/dsh-purge/releases/tag/v1.1.72-dshgo.4). Start the updated plugin; restart the engine if the old plugin is still running. This build fixes `toolFilter is no longer supported` by translating the bundled legacy child configuration into an independent worker `agentPreset` with no further delegation tools. User preset files and the host `/list-agents` export repair are preserved. Both complete presets load in the official 0.2.2-rc.1 Web host; phone validation remains pending. See [installation and rollback](docs/dsh-go-compat.md). The original npm/upstream links below do not contain this fork's fix.
 
 <p align="center">
   <em>DeepSeek Harness jailbreak: every model, swap prompts per model. Default prompt for 小码酱. Please star ⭐ If you build on this, see Attribution required.</em>

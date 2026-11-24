@@ -4,9 +4,9 @@
 
 <h1 align="center">⚔️ DeepSeek Harness 网络安全红队工具（dsh-purge）</h1>
 
-<p align="center"><strong>Version 1.1.72-dshgo.3</strong></p>
+<p align="center"><strong>Version 1.1.72-dshgo.4</strong></p>
 
-> **DSH Go 1.3.0 手机验证版（aakk007 分支）**：通过本仓库的 [插件源 index.json](https://raw.githubusercontent.com/aakk007/dsh-purge/master/index.json) 刷新并更新插件，或从 [本分支 Release](https://github.com/aakk007/dsh-purge/releases/tag/v1.1.72-dshgo.3) 下载。让新版插件启动；若仍运行旧插件，重启一次内置引擎。本版修正 Direct 模式的路径识别，并处理当前进程已缓存的旧导出。插件会备份宿主清单并补回旧 `/list-agents` 导出，保留原预设。已通过本地兼容测试，手机验证待完成。[修复范围、安装及回滚说明](docs/dsh-go-compat.md)。下方原作者的 npm／上游下载链接不包含本分支修复。
+> **DSH Go 1.3.0 手机验证版（aakk007 分支）**：通过本仓库的 [插件源 index.json](https://raw.githubusercontent.com/aakk007/dsh-purge/master/index.json) 刷新并更新插件，或从 [本分支 Release](https://github.com/aakk007/dsh-purge/releases/tag/v1.1.72-dshgo.4) 下载。让新版插件启动；若仍运行旧插件，重启一次内置引擎。本版修复 `toolFilter is no longer supported`：注册时将随包旧子智能体配置转换为新版 `agentPreset`，生成无后续委派入口的“红队执行模式（子智能体）”，保留用户预设文件。继续保留宿主 `/list-agents` 导出修复。整套预设已在官方 0.2.2-rc.1 Web 宿主加载通过，手机验证待完成。[修复范围、安装及回滚说明](docs/dsh-go-compat.md)。下方原作者的 npm／上游下载链接不包含本分支修复。
 
 <p align="center">
   <em>DeepSeek Harness 破甲：让所有模型都能破甲，不同模型可换不同提示词；默认提示词面向国模「小码酱」。Jailbreak for every model — swap prompts per model. 求 Star 收藏 ⭐ 如要二开，请查看署名要求部分</em>

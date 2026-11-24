@@ -2,9 +2,9 @@
 
 ## aakk007 分支变更 / Fork changes
 
-2026-11-24：本分支新增 DSH Go 自定义插件源及 `1.1.72-dshgo.3` 宿主兼容补丁，恢复 DSH `0.2.2-rc.1` 的旧 `/list-agents` 导出，并修正 Direct 路径与当前进程的导出缓存兼容。原作者、来源及许可证保留。下文“未修改”“唯一差异”等描述是原镜像备份时的历史记录，不代表本分支当前状态。变更范围见 `docs/dsh-go-compat.md`。
+2026-11-24：本分支新增 DSH Go 自定义插件源及 `1.1.72-dshgo.4` 兼容补丁，恢复 DSH `0.2.2-rc.1` 的旧 `/list-agents` 导出，修正 Direct 路径与当前进程的导出缓存兼容，并在注册时将随包旧子智能体配置迁移到独立执行预设。原作者、来源及许可证保留。下文“未修改”“唯一差异”等描述是原镜像备份时的历史记录，不代表本分支当前状态。变更范围见 `docs/dsh-go-compat.md`。
 
-This fork adds a DSH Go plugin index and the `1.1.72-dshgo.3` host compatibility fix, including Direct paths and live export resolution. Original attribution and licensing are retained. The unchanged-mirror claims below describe the historical capture, not this modified fork.
+This fork adds a DSH Go plugin index and the `1.1.72-dshgo.4` compatibility fix, including Direct paths, live export resolution and in-memory migration of bundled legacy delegation settings to a worker preset. Original attribution and licensing are retained. The unchanged-mirror claims below describe the historical capture, not this modified fork.
 
 本仓库是 **[YuJunZhiXue/dsh-purge](https://github.com/YuJunZhiXue/dsh-purge)** 的**全量镜像（mirror）**，
 由 [@mmparko](https://github.com/mmparko) 在上游宣布删库前完整备份，用于存档与分发。

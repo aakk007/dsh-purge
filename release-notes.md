@@ -1,3 +1,21 @@
+# 1.1.72-dshgo.4
+
+## 中文
+
+- 修复 DSH Go 1.3.0 / DSH 0.2.2-rc.1 的 `tool-subagent: toolFilter is no longer supported` 加载错误；保留前版宿主 `/list-agents` 导出、Direct 路径及当前进程解析修复。
+- 在已识别兼容宿主中，注册时将随包旧过滤配置转换为 `agentPreset: redteam-worker`；独立执行预设移除后续委派及 workflow/ralph 插件，保留消息控制、业务工具、技能、人设及 `maxDepth: 1` 约束。模式列表会增加“红队执行模式（子智能体）”，日常仍选择“红队模式”。
+- 迁移旧 `modelSelectionSettings` 到 `modelSelection` / `modelDiscovery`，保留用户显式新版开关。不覆盖用户 YAML；遇到无法无损迁移的自定义过滤配置明确报错，不静默丢弃。
+- 预设联合注册支持部分失败清理和逆序卸载，状态记录两个预设的加载结果。
+- 17 项本地测试通过：9 项宿主导出兼容、2 项官方市场选版、5 项配置迁移/生命周期，以及 1 项完整官方 Web 宿主集成。完整集成先复现原报错，再加载两份完整预设，并执行官方 subagent 工具捕获执行预设和深度参数；不发模型请求、不运行红队任务。Android 真机验收仍待用户验证。
+
+## English
+
+- Fix the unsupported legacy `toolFilter` error on DSH Go 1.3.0 / DSH 0.2.2-rc.1, retaining the host export and Direct/live resolver fixes.
+- Translate the bundled legacy configuration at registration time into a separate worker `agentPreset`. The worker keeps its persona, skills, business tools and messaging, with delegation/workflow/ralph plugins removed and depth limited to one. Continue choosing the original red-team mode for ordinary use.
+- Migrate model selection flags while preserving explicit modern values and on-disk user presets. Unknown custom legacy filters produce an actionable error.
+- Clean up partial registration and reverse the registration order on disposal; report both preset states.
+- Seventeen local tests passed, including a complete official Web host boot that reproduces the old failure, loads both migrated presets and captures an actual subagent tool's activation request without model traffic. Android device acceptance remains pending.
+
 # 1.1.72-dshgo.3
 
 ## 中文
