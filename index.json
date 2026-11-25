@@ -15,15 +15,19 @@
       },
       "versions": [
         {
-          "version": "1.1.74",
-          "publishTimestamp": 1795594873,
+          "version": "1.1.75",
+          "publishTimestamp": 1795596019,
           "source": {
             "type": "git",
             "url": "https://github.com/aakk007/dsh-purge.git",
-            "commit": "d567f2cdf5eedc95ce4059fec07948a5b6bae5fb"
+            "commit": "50a1c6b33eab7baa09dee4b5083bfbf9b0861169"
           }
         }
-      ]
+      ],
+      "description": {
+        "en": "Jailbreak plugin for DeepSeek Harness: per-model prompts, maintenance and rollback, plus the unrestricted agent preset.",
+        "zh": "DeepSeek Harness 破甲插件：按模型换提示词，带备份回滚与维护页，附无限制模式预设。"
+      }
     }
   ]
 }
