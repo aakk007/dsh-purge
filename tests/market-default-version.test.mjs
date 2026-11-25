@@ -58,3 +58,26 @@ test('发布索引让官方页面默认选修复版，并为已装 1.1.71 提供
   const selected = listing.versions.find(version => version.version === listing.defaultVersion);
   assert.equal(selected.install.spec, `git+https://github.com/aakk007/dsh-purge.git#${rawIndex.plugins[0].versions[0].source.commit}`);
 });
+
+test('已安装 .4 时官方市场提示更新到当前发行版', options, async () => {
+  const { parseMarketIndex, listingOf } = await officialSelector();
+  const plugin = parseMarketIndex(rawIndex, indexUrl).plugins[0];
+  const listing = listingOf(plugin, [
+    { name: 'dsh-purge', installed: true, version: '1.1.72-dshgo.4' },
+  ], {}, '0.2.2-rc.1');
+  assert.equal(listing.installation.status, 'update-available');
+  assert.equal(listing.defaultVersion, packageVersion);
+  assert.notEqual(listing.defaultVersion, '1.1.72-dshgo.4');
+  const target = listing.versions.find(item => item.version === listing.defaultVersion);
+  assert.equal(target.install.spec, `git+https://github.com/aakk007/dsh-purge.git#${rawIndex.plugins[0].versions[0].source.commit}`);
+});
+
+test('安装当前发行版后不再提示重复更新', options, async () => {
+  const { parseMarketIndex, listingOf } = await officialSelector();
+  const plugin = parseMarketIndex(rawIndex, indexUrl).plugins[0];
+  const listing = listingOf(plugin, [
+    { name: 'dsh-purge', installed: true, version: packageVersion },
+  ], {}, '0.2.2-rc.1');
+  assert.equal(listing.defaultVersion, packageVersion);
+  assert.notEqual(listing.installation.status, 'update-available');
+});

@@ -66,7 +66,8 @@ CI 未提供隔离宿主前缀时不把对应跳过项计作宿主验收。
 
 ## 回滚与交付状态
 
-源码改动未提交、推送或发布，版本与插件索引保持原发行值。
+集成代码已提交为 `5e07048`，随 `1.1.72-dshgo.5` 发布；原插件源更新到 `.5`。
+更新安装后默认仍关闭，已有 tuning 文件中的显式开关保持优先。
 本地备份、完整 diff 和测试日志：
 `D:\Codex\workspace\diagnostics\refusalRetry-20261125`。
 `baseline.zip` 是修改前 `ec1bc83` 的源码归档。
@@ -99,4 +100,5 @@ and handles official error finish chunks. Audit records contain metadata only.
 Fallback restores the previous buffered prefix, not a complete long response.
 Heuristic detection includes known false positives. Integration tests use local
 fixture adapters; device and real-model effectiveness remain unverified.
-No release or installed host configuration is changed by this source integration.
+Included in `1.1.72-dshgo.5`; refresh the existing plugin source to update.
+Installation does not automatically enable retries or change saved settings.

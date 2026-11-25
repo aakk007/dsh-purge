@@ -1,3 +1,22 @@
+# 1.1.72-dshgo.5
+
+## 中文
+
+- 修复原插件源没有更新提示：索引从 `.4` 升到 `.5`，固定到本次发布提交。继续使用原 `master/index.json` 地址，无需新增插件源或更换 APK。
+- 发布已整合的备份回滚、更新完整性校验、配置迁移及“备份与维护”面板。
+- 发布社区 refusalRetry 检测器与有限重试阶梯，保留取消、流错误及工具调用处理。默认关闭；需要在插件配置或 `$DSH_HOME/dsh-purge/tuning.json` 设置 `refusalRetry: true`，已有显式配置保留。
+- 保留 `.4` 的 Direct/PRoot、宿主旧导出及子智能体预设兼容修复。
+- 测试包含官方市场选版：已安装 `.4` 时返回 `update-available`，目标 `.5`；已安装 `.5` 时不提示重复更新。隔离宿主和 fixture 测试不代表 Android 真机或真实模型效果。
+- 更新完成后，若仍运行旧插件，停止并启动一次内置引擎。回滚可安装保留的 `.4` Release；仅停用重试设置 `refusalRetry: false`，用户配置与数据不删除。
+
+## English
+
+- Update the existing plugin index from `.4` to `.5`, pinned to the release commit, so installed `.4` clients see an update. No new source URL or APK is needed.
+- Include community maintenance, backup/rollback, integrity verification, configuration migration and the maintenance panel.
+- Include the bounded refusalRetry ladder, disabled by default. Enable it explicitly in plugin config or `$DSH_HOME/dsh-purge/tuning.json`; saved settings are preserved.
+- Retain `.4` mobile compatibility. Official market selection tests cover upgrade availability and no duplicate update after installation.
+- Restart the embedded engine if it still runs the previous plugin. The retained `.4` release provides rollback. Device and real-model validation remain pending.
+
 # 1.1.72-dshgo.4
 
 ## 中文
