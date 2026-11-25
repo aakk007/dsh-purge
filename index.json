@@ -15,12 +15,12 @@
       },
       "versions": [
         {
-          "version": "1.1.77",
-          "publishTimestamp": 1795596948,
+          "version": "1.1.78",
+          "publishTimestamp": 1795597485,
           "source": {
             "type": "git",
             "url": "https://github.com/aakk007/dsh-purge.git",
-            "commit": "1f070fa1fcbb6b51b25dc6297a2171015f07c10c"
+            "commit": "6f6d2699e6a40adfdcbcbc4119897e6425488906"
           }
         }
       ],
