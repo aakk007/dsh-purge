@@ -8858,6 +8858,29 @@ body[data-ds-dark-theme] .dshp-rewind-item span{color:var(--dsw-alias-label-tert
 			ctx.effect(() => installRewindWatch(ctx), "dsh-purge: rewind watch");
 		}
 
+		/**
+		 * 设置入口：DSH 设置 → dsh-purge，以及插件/ bundles 详情页里的「配置」。
+		 *
+		 * 停靠面板只是快捷方式；合并社区维护模块后，社区版给的两处入口不能丢：
+		 *   · settings.section        官方设置页里的独立一节（1.1.71 就是这条）
+		 *   · plugins.bundle.config   插件详情页（截图里那一页）的配置区
+		 *   · plugins.row.config      插件列表行的配置区
+		 * 设置页里带着检查更新 / 立即更新（PurgifySection 的版本通道），
+		 * 也就是社区版那个「更新按钮」。
+		 */
+		function SettingsPage(props) {
+			// 插件列表/详情可能先要一行摘要（view === "summary"），再展开完整页。
+			if (props && props.view === "summary") return h("span", null, "dsh-purge");
+			return h("div", { className: "dshp-settings-page" }, h(SettingsRoot, props));
+		}
+		function registerSettingsEntry(ctx, slot, metadata) {
+			try {
+				ctx.slots.inject(slot, () => ctx.slots.register(metadata, SettingsPage));
+			} catch (e) {
+				try { console.warn("[dsh-purge] " + slot + " skipped:", e); } catch { /* ignore */ }
+			}
+		}
+
 		function apply(ctx) {
 			ctx.effect(() => ctx.locale.register(NS, { zh, en }), "dsh-purge: dictionaries");
 			const t = ctx.locale.bind(NS);
@@ -8867,6 +8890,24 @@ body[data-ds-dark-theme] .dshp-rewind-item span{color:var(--dsw-alias-label-tert
 				id: "dsh-purge-dock",
 				order: 50,
 			}, () => h(react.Fragment, null, h(WelcomeNotice), h(PurgeLauncher), h(PurgeDock), h(HeroNewSessionMount), h(TabRowPurgeMount), h(EnvAdaptSendGate))));
+			registerSettingsEntry(ctx, "settings.section", {
+				name: "settings.section",
+				id: "dsh-purge",
+				order: 40,
+				label: () => t("nav"),
+				locale: NS,
+				inject: () => ({ t }),
+			});
+			registerSettingsEntry(ctx, "plugins.bundle.config", {
+				name: "plugins.bundle.config",
+				key: "dsh-purge",
+				inject: () => ({ t }),
+			});
+			registerSettingsEntry(ctx, "plugins.row.config", {
+				name: "plugins.row.config",
+				key: "dsh-purge#dsh-purge",
+				inject: () => ({ t }),
+			});
 			try {
 				if (typeof ctx.inject === "function") {
 					ctx.inject(["sessions", "uiWorkspace", "workspaces", "conversation"], (host) => installRewindUi(host));

@@ -4,9 +4,11 @@
 
 <h1 align="center">⚔️ DeepSeek Harness cybersecurity red-team tool (dsh-purge)</h1>
 
-<p align="center"><strong>Version 1.1.75</strong></p>
+<p align="center"><strong>Version 1.1.76</strong></p>
 
-> **1.1.75 fixes the garbled 1.1.74 description:** the `package.json` description shipped in 1.1.74 was double-encoded; 1.1.75 restores it and adds a manifest regression test. Behaviour is unchanged. Refresh the plugin source to update. See [scope and verification](docs/dsh-go-compat.md).
+> **1.1.76 restores the settings entry and update button:** after merging the community maintenance modules, the dock had displaced “Settings → dsh-purge” and the plugin detail “config”; this release registers `settings.section`, `plugins.bundle.config` and `plugins.row.config` again, so the official settings page carries the purge panel (check for updates / update now, stable/beta channels, rules, skills). See [scope and verification](docs/dsh-go-compat.md).
+
+> **1.1.75 fixes the garbled 1.1.74 description:** the `package.json` description shipped in 1.1.74 was double-encoded; 1.1.75 restores it and adds a manifest regression test.
 
 > **1.1.74 adds “unrestricted mode” and fixes the dshgo overlay:** the mode list now offers **无限制模式** and **无限制模式（子智能体）** (bundled preset installed to disk and registered into `agentPresets`; user files are not overwritten), and the plugin panel no longer sits under DSH Go's back/menu buttons.
 

@@ -4,9 +4,11 @@
 
 <h1 align="center">⚔️ DeepSeek Harness 网络安全红队工具（dsh-purge）</h1>
 
-<p align="center"><strong>Version 1.1.75</strong></p>
+<p align="center"><strong>Version 1.1.76</strong></p>
 
-> **1.1.75 修 1.1.74 的乱码描述**：1.1.74 发布时 `package.json` 的描述被二次编码，插件详情页显示成乱码；1.1.75 恢复原文，功能不变，并加了清单回归测试。刷新插件源更新即可。[范围与验证](docs/dsh-go-compat.md)。
+> **1.1.76 补回设置入口与更新按钮**：合并社区维护模块后，停靠面板顶掉了「设置 → dsh-purge」和插件详情页的「配置」；本版重新注册 `settings.section`、`plugins.bundle.config`、`plugins.row.config`，设置页里就是「破甲」控制面（检查更新 / 立即更新、稳定/测试通道、规则集、技能库）。[范围与验证](docs/dsh-go-compat.md)。
+
+> **1.1.75 修 1.1.74 的乱码描述**：1.1.74 发布时 `package.json` 的描述被二次编码，插件详情页显示成乱码；1.1.75 恢复原文，并加了清单回归测试。
 
 > **1.1.74 补齐“无限制模式”并修 dshgo 网页版遮挡**：模式下拉新增 **无限制模式** 与 **无限制模式（子智能体）**（随包落盘、注册进 `agentPresets`，用户文件不覆盖）；插件面板不再被 DSH Go 的返回/菜单按钮遮挡。[范围与验证](docs/dsh-go-compat.md)。
 

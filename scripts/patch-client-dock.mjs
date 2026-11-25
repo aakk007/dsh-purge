@@ -407,7 +407,20 @@ const oldApply = `		function apply(ctx) {
 			}
 		}`;
 
-const newApply = `		function apply(ctx) {
+const newApply = `		// 设置入口：DSH 设置 → dsh-purge，以及插件/ bundles 详情页里的「配置」。
+		function SettingsPage(props) {
+			if (props && props.view === "summary") return h("span", null, "dsh-purge");
+			return h("div", { className: "dshp-settings-page" }, h(SettingsRoot, props));
+		}
+		function registerSettingsEntry(ctx, slot, metadata) {
+			try {
+				ctx.slots.inject(slot, () => ctx.slots.register(metadata, SettingsPage));
+			} catch (e) {
+				try { console.warn("[dsh-purge] " + slot + " skipped:", e); } catch { /* ignore */ }
+			}
+		}
+
+		function apply(ctx) {
 			ctx.effect(() => ctx.locale.register(NS, { zh, en }), "dsh-purge: dictionaries");
 			const t = ctx.locale.bind(NS);
 			translate = t;
@@ -416,6 +429,24 @@ const newApply = `		function apply(ctx) {
 				id: "dsh-purge-dock",
 				order: 50,
 			}, () => h(react.Fragment, null, h(PurgeDock), h(HeroNewSessionMount), h(TabRowPurgeMount), h(EnvAdaptSendGate))));
+			registerSettingsEntry(ctx, "settings.section", {
+				name: "settings.section",
+				id: "dsh-purge",
+				order: 40,
+				label: () => t("nav"),
+				locale: NS,
+				inject: () => ({ t }),
+			});
+			registerSettingsEntry(ctx, "plugins.bundle.config", {
+				name: "plugins.bundle.config",
+				key: "dsh-purge",
+				inject: () => ({ t }),
+			});
+			registerSettingsEntry(ctx, "plugins.row.config", {
+				name: "plugins.row.config",
+				key: "dsh-purge#dsh-purge",
+				inject: () => ({ t }),
+			});
 			try {
 				if (typeof ctx.inject === "function") {
 					ctx.inject(["sessions", "uiWorkspace", "workspaces", "conversation"], (host) => installRewindUi(host));

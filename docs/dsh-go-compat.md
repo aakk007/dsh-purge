@@ -1,6 +1,19 @@
 # DSH Go 1.3.0 兼容修复 / Compatibility fix
 
-当前分支版本：`1.1.75`；本文记录 `.4` 引入并在 `.5` 保留的手机兼容修复，`1.1.74` 新增的“无限制模式”与 dshgo 网页版遮挡修复，以及 `1.1.75` 对插件详情页乱码描述的修复。原作者为 YuJunZhiXue，原包基线为 `1.1.71`。
+当前分支版本：`1.1.76`；本文记录 `.4` 引入并在 `.5` 保留的手机兼容修复，`1.1.74` 的“无限制模式”与 dshgo 网页版遮挡修复，`1.1.75` 对插件详情页乱码描述的修复，以及 `1.1.76` 补回的设置入口与更新按钮。原作者为 YuJunZhiXue，原包基线为 `1.1.71`。
+
+## 设置入口、更新按钮与插件详情配置（1.1.76）
+
+停靠面板（`shell.overlay`）是 1.1.7x 加的快捷入口，合并时把 1.1.71 原有的 `settings.section` 注册替换掉了，于是「设置」里没有 dsh-purge，插件详情页也没有配置区——社区版一直保留这两处。现在四处入口同时存在：
+
+| 槽位 | 位置 | 内容 |
+| --- | --- | --- |
+| `settings.section`（id `dsh-purge`，order 40） | DSH 设置 → dsh-purge | 破甲控制面（版本通道 + 检查更新 / 立即更新）、规则集、技能库 |
+| `plugins.bundle.config`（key `dsh-purge`） | 插件 → dsh-purge 详情页 | 同一页设置 |
+| `plugins.row.config`（key `dsh-purge#dsh-purge`） | 插件列表行 | 同一页设置；`view: "summary"` 只回一行 `dsh-purge` |
+| `shell.overlay`（id `dsh-purge-dock`） | 悬浮面板 | 清洗 / 备份与维护 / 演练台 |
+
+更新按钮不需要新接口：`GET /dsh-purge/update` 返回当前版本、通道与可选版本，`POST /dsh-purge/update` 接受 `op: apply | switch | channel | auto`，更新完按宿主决定重载页面或重启。四个槽位名已在本机宿主客户端里核对存在；注册失败只记日志，不影响其余入口。
 
 ## 手机安装
 
@@ -92,7 +105,7 @@ DSH_FULL_TEST_PREFIX=/absolute/isolated-dsh-npm-prefix npm run test:full-preset-
 
 ## English
 
-Refresh this fork's custom plugin index, verify installed version `1.1.75`, then start the updated plugin. Version `1.1.75` restores the `package.json` description that 1.1.74 shipped double-encoded (the detail page showed mojibake) and adds a manifest regression test; the unrestricted mode (two registry rows), the dock overlay fix, the `.4` mobile fixes, maintenance modules and opt-in refusalRetry are unchanged. Restart the embedded engine if the old plugin is still running. The mode list should show “无限制模式” and “无限制模式（子智能体）”; `$DSH_HOME/dsh-purge/unrestricted-preset.json` records the registration phase. No preset recreation or APK replacement is required.
+Refresh this fork's custom plugin index, verify installed version `1.1.76`, then start the updated plugin. Version `1.1.76` restores the settings entry and the update button: `settings.section` puts the purge panel (version channels with check/update) back under Settings → dsh-purge, and `plugins.bundle.config` / `plugins.row.config` open the same page from the plugin detail sheet and its list row; the dock stays as a shortcut. `1.1.75` restored the `package.json` description that 1.1.74 shipped double-encoded, and `1.1.74` added the unrestricted mode (two registry rows) and the dock overlay fix. Restart the embedded engine if the old plugin is still running. The mode list should show “无限制模式” and “无限制模式（子智能体）”; `$DSH_HOME/dsh-purge/unrestricted-preset.json` records the registration phase. No preset recreation or APK replacement is required.
 
 The Web Discover page prefers stable versions. Listing the old stable `1.1.71` alongside the fix made it select the old version. The installation index now lists only the fix; the baseline remains available through its GitHub rollback tag. Regression tests run the official `0.2.2-rc.1` selection function.
 

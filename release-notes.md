@@ -1,3 +1,23 @@
+# 1.1.76
+
+## 中文
+
+- 补回被停靠面板顶掉的两处入口（社区版一直有）：
+  - **设置 → dsh-purge**：重新注册 `settings.section`，官方设置页里有独立一节，页面里就是「破甲」控制面（版本通道 + **检查更新 / 立即更新**）、规则集和技能库。
+  - **插件详情页的配置区**：注册 `plugins.bundle.config`（`key: dsh-purge`）与 `plugins.row.config`（`key: dsh-purge#dsh-purge`），在「插件 → dsh-purge」详情页和列表行里都能直接打开同一页设置，不用再找悬浮入口。
+- 「更新按钮」本来就在设置页的版本通道里（`GET/POST /dsh-purge/update`：检查、切稳定/测试通道、选版本、立即更新并重启宿主），之前因为设置入口没了才看不到；本次入口恢复后即可用。
+- 停靠面板、无限制模式预设与 dshgo 的遮挡修复都不变；摘要视图（`view: "summary"`）只回一行 `dsh-purge`，不把整页塞进列表行。
+- 测试新增 2 项：`apply()` 必须注册四处槽位（`shell.overlay` / `settings.section` / `plugins.bundle.config` / `plugins.row.config`，含 id 与 key），设置页能渲染出「破甲」面板与版本通道，并且更新按钮的 GET/POST 接口都在。已核对本机宿主客户端确实定义了这四个槽位名。
+
+## English
+
+- Restore the two entries the dock had displaced (both exist in the community build):
+  - **Settings → dsh-purge** (`settings.section`): the official settings page gets its own section with the purge panel — version channels, **check for updates / update now**, rules and skills.
+  - **Plugin detail config**: `plugins.bundle.config` (`key: dsh-purge`) and `plugins.row.config` (`key: dsh-purge#dsh-purge`) open the same page from the plugin detail sheet and its list row.
+- The update button lives in the version channels (`GET/POST /dsh-purge/update`); it was unreachable only because the settings entry was gone.
+- The dock, the unrestricted preset and the dshgo overlay fix are unchanged; the summary view returns a single `dsh-purge` line.
+- Two new tests pin the four slot registrations (names, id, keys), the rendered purge panel with its version channels, and the update endpoints. The installed host client was checked to define all four slot names.
+
 # 1.1.75
 
 ## 中文
