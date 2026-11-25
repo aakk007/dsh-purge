@@ -1,3 +1,19 @@
+# 1.1.77
+
+## 中文
+
+- 设置入口改名：1.1.76 注册的 `settings.section` 沿用了旧文案 `nav`，在「设置」里显示成 **规则设定 / Rules**，按 “dsh-purge” 找当然找不到。现在这一节直接叫 **dsh-purge**（新键 `settings.nav`，中英同文）。
+- 入口位置不变：设置 → dsh-purge（在导航末尾），插件 → dsh-purge 详情页 → 配置，插件列表行的配置；里面就是破甲控制面（版本通道、**检测更新 / 更新**）、规则集、技能库。
+- 已经是最新版但没有设置入口的，先在悬浮面板「清洗」页的「补丁」卡片点「检测更新」升级；升级后重启内置引擎，再回设置里看。
+- 测试同步：`client-slots` 断言设置节标签取自 `settings.nav`、locale 命名空间为 `settings.dsh-purge`。
+
+## English
+
+- Rename the settings entry: 1.1.76 registered `settings.section` with the legacy `nav` string, so Settings showed **规则设定 / Rules** and nobody would look for “dsh-purge” there. The section is now labelled **dsh-purge** (new key `settings.nav`).
+- Same places: Settings → dsh-purge at the end of the nav, the plugin detail config, and the plugin list row config; the page carries the version channels (**check update / update**), rules and skills.
+- If you are on an older build with no settings entry, open the dock's Clean tab → the Patches card → check update; after updating, restart the embedded engine and look in Settings again.
+- Tests assert the section label comes from `settings.nav` and the locale namespace is `settings.dsh-purge`.
+
 # 1.1.76
 
 ## 中文

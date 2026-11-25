@@ -433,7 +433,7 @@ const newApply = `		// 设置入口：DSH 设置 → dsh-purge，以及插件/ b
 				name: "settings.section",
 				id: "dsh-purge",
 				order: 40,
-				label: () => t("nav"),
+				label: () => t("settings.nav"),
 				locale: NS,
 				inject: () => ({ t }),
 			});

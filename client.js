@@ -208,6 +208,8 @@ const MaintenancePanel = createMaintenancePanel({ h, useState, useEffect, useRef
 
 		const zh = {
 			nav: "规则设定",
+			// 设置页左侧/顶部导航里显示的名字：用户在「设置」里按 dsh-purge 找得到。
+			"settings.nav": "dsh-purge",
 			"dock.clean": "清洗",
 			"dock.drill": "演练台",
 			"dock.toggle": "dsh-purge",
@@ -548,6 +550,7 @@ const MaintenancePanel = createMaintenancePanel({ h, useState, useEffect, useRef
 
 		const en = {
 			nav: "Rules",
+			"settings.nav": "dsh-purge",
 			"dock.clean": "Clean",
 			"dock.drill": "Drill",
 			"dock.toggle": "dsh-purge",
@@ -8894,7 +8897,7 @@ body[data-ds-dark-theme] .dshp-rewind-item span{color:var(--dsw-alias-label-tert
 				name: "settings.section",
 				id: "dsh-purge",
 				order: 40,
-				label: () => t("nav"),
+				label: () => t("settings.nav"),
 				locale: NS,
 				inject: () => ({ t }),
 			});

@@ -4,9 +4,9 @@
 
 <h1 align="center">⚔️ DeepSeek Harness cybersecurity red-team tool (dsh-purge)</h1>
 
-<p align="center"><strong>Version 1.1.76</strong></p>
+<p align="center"><strong>Version 1.1.77</strong></p>
 
-> **1.1.76 restores the settings entry and update button:** after merging the community maintenance modules, the dock had displaced “Settings → dsh-purge” and the plugin detail “config”; this release registers `settings.section`, `plugins.bundle.config` and `plugins.row.config` again, so the official settings page carries the purge panel (check for updates / update now, stable/beta channels, rules, skills). See [scope and verification](docs/dsh-go-compat.md).
+> **1.1.77 renames the settings entry:** 1.1.76 registered the section with the legacy `nav` string, so Settings showed “Rules”; it is now **dsh-purge**, at the end of the Settings nav (the plugin detail config and the list row config open the same page). The page carries the version channels (check update / update), rules and skills. See [scope and verification](docs/dsh-go-compat.md).
 
 > **1.1.75 fixes the garbled 1.1.74 description:** the `package.json` description shipped in 1.1.74 was double-encoded; 1.1.75 restores it and adds a manifest regression test.
 

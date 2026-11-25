@@ -4,9 +4,9 @@
 
 <h1 align="center">⚔️ DeepSeek Harness 网络安全红队工具（dsh-purge）</h1>
 
-<p align="center"><strong>Version 1.1.76</strong></p>
+<p align="center"><strong>Version 1.1.77</strong></p>
 
-> **1.1.76 补回设置入口与更新按钮**：合并社区维护模块后，停靠面板顶掉了「设置 → dsh-purge」和插件详情页的「配置」；本版重新注册 `settings.section`、`plugins.bundle.config`、`plugins.row.config`，设置页里就是「破甲」控制面（检查更新 / 立即更新、稳定/测试通道、规则集、技能库）。[范围与验证](docs/dsh-go-compat.md)。
+> **1.1.77 设置入口改名 dsh-purge**：1.1.76 补回设置节时沿用了旧文案，设置里显示成「规则设定」；现在直接叫 **dsh-purge**，位置在 设置 导航末尾（插件详情页的「配置」、列表行配置同样可用）。里面是破甲控制面：检测更新 / 更新、稳定/测试通道、规则集、技能库。[范围与验证](docs/dsh-go-compat.md)。
 
 > **1.1.75 修 1.1.74 的乱码描述**：1.1.74 发布时 `package.json` 的描述被二次编码，插件详情页显示成乱码；1.1.75 恢复原文，并加了清单回归测试。
 

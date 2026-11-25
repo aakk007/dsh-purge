@@ -59,7 +59,8 @@ test('apply() 注册设置入口与插件详情配置区，更新按钮所在的
   assert.equal(settings[0].metadata.id, 'dsh-purge');
   assert.equal(settings[0].metadata.order, 40);
   assert.equal(typeof settings[0].metadata.label, 'function');
-  assert.equal(settings[0].metadata.label(), 'nav');
+  assert.equal(settings[0].metadata.label(), 'settings.nav');
+  assert.equal(settings[0].metadata.locale, 'settings.dsh-purge');
 
   const bundle = byName('plugins.bundle.config');
   assert.equal(bundle.length, 1, '插件详情页必须能打开配置');
