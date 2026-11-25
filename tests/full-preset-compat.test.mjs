@@ -8,9 +8,10 @@ import { mkdirSync, mkdtempSync, readFileSync, rmSync, symlinkSync, writeFileSyn
 import { readPresetDefinition } from '../lib/redteam/preset-composition.js';
 import { prepareSubagentPresets, registerPresetDefinitions } from '../lib/host-compat/subagent-presets.mjs';
 import { ensureDshGoCompat } from '../lib/host-compat/subagent-list-agents.mjs';
+import { UNRESTRICTED_WORKER } from '../lib/presets/index.js';
 
 const prefix = process.env.DSH_FULL_TEST_PREFIX;
-test('完整官方 Web 宿主加载整份红队预设，复现旧配置失败并验证执行预设', {
+test('完整官方 Web 宿主加载整份红队预设，复现旧配置失败并验证执行预设；无限制模式同一宿主可注册', {
   skip: !prefix && 'set DSH_FULL_TEST_PREFIX to an isolated official @deepseek-ai/dsh@0.2.2-rc.1 installation',
   timeout: 90_000,
 }, async (t) => {
@@ -28,6 +29,7 @@ test('完整官方 Web 宿主加载整份红队预设，复现旧配置失败并
   const args = { prefix: directory, marker, platform: 'linux' };
   let shutdown;
   let disposePresets;
+  let disposeUnrestricted;
   let agentHandle;
   const leases = [];
   try {
@@ -88,6 +90,29 @@ test('完整官方 Web 宿主加载整份红队预设，复现旧配置失败并
     assert.ok(tools.get('list_agents', workerScope));
     assert.ok(tools.get('send_message', workerScope));
 
+    // 无限制模式：同一份组合在同一宿主上注册，确认模式下拉能同时拿到
+    // 「无限制模式」和它的执行预设「无限制模式（子智能体）」。
+    const unrestricted = readPresetDefinition('unrestricted', join(root, 'presets/unrestricted'));
+    const unrestrictedDefinitions = prepareSubagentPresets(unrestricted, UNRESTRICTED_WORKER);
+    assert.deepEqual(unrestrictedDefinitions.map(item => item.id), ['unrestricted-worker', 'unrestricted']);
+    disposeUnrestricted = await registerPresetDefinitions(registry, unrestrictedDefinitions);
+    const unrestrictedListed = await registry.list();
+    for (const definition of unrestrictedDefinitions) {
+      const row = unrestrictedListed.find(preset => preset.id === definition.id);
+      assert.ok(row, definition.id);
+      assert.equal(row.name, definition.name);
+      assert.equal(row.broken, undefined, `${definition.id}: ${row.broken}`);
+    }
+    const unrestrictedCommander = await registry.acquireScope('unrestricted');
+    leases.push(unrestrictedCommander);
+    const unrestrictedWorker = await registry.acquireScope('unrestricted-worker');
+    leases.push(unrestrictedWorker);
+    assert.ok(tools.get('subagent', unrestrictedCommander.key));
+    for (const name of ['subagent', 'subagent_fork', 'workflow', 'ralph']) {
+      assert.equal(tools.get(name, unrestrictedWorker.key), undefined, name);
+    }
+    assert.ok(tools.get('list_agents', unrestrictedWorker.key));
+
     // 创建空会话，执行真正的官方工具；在启动边界捕获请求，不发送模型请求。
     agentHandle = await app.ctx.get('agents').create({
       sessionId: randomUUID(),
@@ -116,6 +141,7 @@ test('完整官方 Web 宿主加载整份红队预设，复现旧配置失败并
     for (const cleanup of [
       () => agentHandle?.dispose(),
       ...leases.reverse().map(lease => () => lease[Symbol.asyncDispose]()),
+      () => disposeUnrestricted?.(),
       () => disposePresets?.(),
       () => shutdown?.shutdown(0),
       () => ensureDshGoCompat({ ...args, mode: 'restore' }),

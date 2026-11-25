@@ -1,6 +1,6 @@
 # DSH Go 1.3.0 兼容修复 / Compatibility fix
 
-当前分支版本：`1.1.73`；本文记录 `.4` 引入并在 `.5` 保留的手机兼容修复。`.5` 另外包含维护模块及默认关闭的 refusalRetry。原作者为 YuJunZhiXue，原包基线为 `1.1.71`。
+当前分支版本：`1.1.74`；本文记录 `.4` 引入并在 `.5` 保留的手机兼容修复，以及 `1.1.74` 新增的“无限制模式”与 dshgo 网页版遮挡修复。原作者为 YuJunZhiXue，原包基线为 `1.1.71`。
 
 ## 手机安装
 
@@ -9,6 +9,31 @@
 2. 更新 dsh-purge，确认“已安装”中的版本为 `1.1.73`。也可从本仓库对应 GitHub Release 下载完整插件包。
 3. 让新版插件启动；若更新后仍在运行旧插件，停止并启动一次内置引擎。本版同时补回磁盘导出和当前进程解析，不再要求补盘后再额外启动一次。
 4. 打开原来的“红队模式”预设，确认没有 `tool-subagent-list-agents ... never started` 或 `toolFilter is no longer supported`。模式列表新增的“红队执行模式（子智能体）”供指挥自动派活使用，日常仍选“红队模式”。
+5. 模式列表里应同时出现“无限制模式”和“无限制模式（子智能体）”。没有的话看 `$DSH_HOME/dsh-purge/unrestricted-preset.json` 的 `phase`：`waiting-registry` 是 registry 还没起（重启内置引擎），`registered-broken` 的 `broken` 字段写着哪一行挂载失败。
+
+## 无限制模式与 dshgo 网页版遮挡（1.1.74）
+
+### 模式下拉里没有“无限制模式”
+
+模式下拉只认 `agentPresets.register()`，把文件夹放进 `$DSH_HOME/.agent-presets/` 不会出现。本版新增插件条目 `dsh-purge/presets`（`lib/presets/index.js`）：
+
+1. 首次启动把随包 `presets/unrestricted/{preset.yml,agent.cordis.yml}` 落到 `$DSH_HOME/.agent-presets/unrestricted/`；已有 `agent.cordis.yml` 时保留用户内容（要重置：`DSH_PURGE_PRESET_REFRESH=1` 启动一次）。
+2. 等 registry 就绪后注册“无限制模式”；spawn 行里的旧 `toolFilter` 在内存里迁移成独立的“无限制模式（子智能体）”，用户 YAML 不改写。注册前按现有约定把原始文件备份到 `$DSH_HOME/dsh-purge/preset-migrations/`。
+3. 状态写入 `$DSH_HOME/dsh-purge/unrestricted-preset.json`（`phase`、`registeredPresets`、`broken`）。
+
+预设的人设只声明“操作者意图优先、不重复声明边界”，工具面与红队模式一致，但不含 `redteam-tools` / 锚点门，技能用宿主默认根。与红队预设一样，它不重复实现宿主平面的审批/沙箱。
+
+### 插件面板被返回、菜单图标遮挡
+
+dshgo 把返回、菜单按钮浮在 WebView 之上（原生绘制，DOM 的 `z-index` 抢不回来），并把几何通过 `--dsh-app-*` 变量交给页面（`dsh_web_phone.css` / `web_view_page.dart`）：`--dsh-app-inset-top` 是所有按钮下方，`--dsh-app-lead-h` 是按钮底边，`--dsh-app-status` + `--dsh-app-band` 是桌面布局的状态栏与 band，`--dsh-app-inset-{left,right,bottom}` 是安全区。
+
+停靠面板原来固定在 `y=48` 的右上角，手机上面板几乎占满宽度，正好压在两个按钮下面。现在 `appChromeInsets()` 读这些变量，默认位置与拖动/缩放约束都从按钮下方开始，并收在安全区内；变量在页面加载后才写入时，启动阶段复核 10 秒并随布局属性变化重新收敛。官方 Web 与桌面浏览器没有这些变量，几何保持原值。授权窗、环境适配等遮挡层同样按安全区加内边距。
+
+```sh
+# 只读复核：宿主变量与面板落点（在 dshgo 页面控制台里）
+getComputedStyle(document.documentElement).getPropertyValue('--dsh-app-inset-top')
+document.querySelector('.dshp-dock')?.style.top
+```
 
 不需要删除或重建原预设，不需要安装新 APK。不要使用原作者 npm 包或原作者仓库的旧下载地址来获取这次修复。
 
@@ -49,9 +74,9 @@ node lib/host-compat/subagent-list-agents.mjs --prefix /opt/dsh --restore
 
 ## 验证范围
 
-17 项本地测试通过：9 项宿主兼容测试、2 项官方市场选版测试、5 项配置迁移及生命周期测试、1 项完整宿主集成测试。宿主测试覆盖缺失导出、Direct 路径、清单保护、CLI 回滚、真实 Cordis Loader 和 ToolsService；官方注册器先复现 `never started`，再确认仅补盘仍失败，最后在同一进程启用解析兼容后成功注册并调用 `list_agents`。
+25 项本地测试通过：9 项宿主兼容测试、2 项官方市场选版测试、5 项配置迁移及生命周期测试、1 项完整宿主集成测试、4 项停靠面板几何测试、4 项无限制模式预设测试。宿主测试覆盖缺失导出、Direct 路径、清单保护、CLI 回滚、真实 Cordis Loader 和 ToolsService；官方注册器先复现 `never started`，再确认仅补盘仍失败，最后在同一进程启用解析兼容后成功注册并调用 `list_agents`。
 
-完整集成使用隔离安装的官方 `@deepseek-ai/dsh@0.2.2-rc.1`，实际启动 Web profile（临时回环端口、关闭自动打开浏览器），先注册整份旧红队预设复现 `toolFilter` 错误，再注册迁移后的两份完整预设并检查其工具目录。创建空会话执行官方 `subagent` 工具，在 `startActivation` 边界捕获请求，确认 `agentPreset` 和深度参数。测试不发模型请求、不运行真实红队工作流，不替代 Android Direct/PRoot 真机测试。
+完整集成使用隔离安装的官方 `@deepseek-ai/dsh@0.2.2-rc.1`，实际启动 Web profile（临时回环端口、关闭自动打开浏览器），先注册整份旧红队预设复现 `toolFilter` 错误，再注册迁移后的两份完整预设并检查其工具目录；同一进程随后注册“无限制模式”与“无限制模式（子智能体）”，确认两份都在 registry 列表里、`broken` 为空、执行预设不含 `subagent` / `subagent_fork` / `workflow` / `ralph`。创建空会话执行官方 `subagent` 工具，在 `startActivation` 边界捕获请求，确认 `agentPreset` 和深度参数。测试不发模型请求、不运行真实红队工作流，不替代 Android Direct/PRoot 真机测试。
 
 ```sh
 DSH_TEST_PREFIX=/absolute/pristine-npm-prefix npm run test:host-compat
@@ -67,7 +92,7 @@ DSH_FULL_TEST_PREFIX=/absolute/isolated-dsh-npm-prefix npm run test:full-preset-
 
 ## English
 
-Refresh this fork's custom plugin index, verify installed version `1.1.73`, then start the updated plugin. Version `.5` retains the `.4` mobile fixes and includes maintenance modules and opt-in refusalRetry. Restart the embedded engine if the old plugin is still running. Open the existing red-team preset to verify it loads. No preset recreation or APK replacement is required.
+Refresh this fork's custom plugin index, verify installed version `1.1.74`, then start the updated plugin. Version `1.1.74` adds the unrestricted mode (two registry rows) and keeps the `.4` mobile fixes, maintenance modules and opt-in refusalRetry. Restart the embedded engine if the old plugin is still running. The mode list should show “无限制模式” and “无限制模式（子智能体）”; `$DSH_HOME/dsh-purge/unrestricted-preset.json` records the registration phase. The dock panel now clears DSH Go's back/menu buttons by reading the injected `--dsh-app-*` geometry, so it no longer sits under the native controls. No preset recreation or APK replacement is required.
 
 The Web Discover page prefers stable versions. Listing the old stable `1.1.71` alongside the fix made it select the old version. The installation index now lists only the fix; the baseline remains available through its GitHub rollback tag. Regression tests run the official `0.2.2-rc.1` selection function.
 
@@ -77,4 +102,4 @@ The original host manifest is backed up next to `package.json`. To roll back, se
 
 On the recognized host, legacy delegation settings are migrated in memory into an independent `redteam-worker` preset without further delegation/workflow/ralph plugins. Model selection flags are migrated; explicit modern values win. Unknown custom filters fail explicitly. User YAML files remain unchanged. The original red-team mode remains the ordinary entry point; the additional worker mode is selected automatically by spawn.
 
-Seventeen local tests passed, including complete official Web host startup, reproduction of the old `toolFilter` failure, registration of both full presets, and interception of an actual subagent tool's activation request to check its worker preset and depth limit. No model traffic or red-team workload is executed. Both regular and internal Loader paths were tested on Node 24.18.0. Device validation remains pending. Original authorship and licensing are retained.
+Twenty-five local tests passed, including complete official Web host startup, reproduction of the old `toolFilter` failure, registration of both red-team presets plus both unrestricted rows with no broken entries, dock-geometry checks against the host insets, and interception of an actual subagent tool's activation request to check its worker preset and depth limit. No model traffic or red-team workload is executed. Both regular and internal Loader paths were tested on Node 24.18.0. Device validation remains pending. Original authorship and licensing are retained.

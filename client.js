@@ -1024,7 +1024,10 @@ body[data-ds-dark-theme] .dshp-restart-card .dshp-btn-primary,body[data-ds-dark-
 @media (max-width:640px){.dshp-metrics{grid-template-columns:1fr}.dshp-ruleitem{flex-wrap:wrap}.dshp-rule-ops{width:100%;justify-content:flex-end}}
 @media (prefers-reduced-motion:reduce){.dshp-btn,.dshp-bar>i{transition:none}.dshp-skel{animation:none}}
 
-.dshp-dock{position:fixed;top:12px;right:12px;z-index:10050;display:flex;flex-direction:column;width:var(--dshp-dock-w,620px);height:var(--dshp-dock-h,72vh);min-width:380px;min-height:320px;max-width:calc(100vw - 16px);max-height:calc(100vh - 16px);box-sizing:border-box;background:color-mix(in srgb,var(--dsw-alias-bg-layer-1,var(--dshp-paper,#1c1c1c)) 52%,transparent);backdrop-filter:blur(22px) saturate(1.35);-webkit-backdrop-filter:blur(22px) saturate(1.35);border:1px solid color-mix(in srgb,var(--dsw-alias-border-l1,var(--dshp-line,#555)) 65%,transparent);border-radius:12px;box-shadow:0 18px 48px color-mix(in srgb,#000 30%,transparent),0 0 0 1px color-mix(in srgb,#fff 6%,transparent);pointer-events:auto;color:var(--dsw-alias-label-primary,var(--dshp-ink,#f2f2f2));overflow:visible}
+.dshp-dock{position:fixed;top:12px;right:12px;z-index:10050;display:flex;flex-direction:column;width:var(--dshp-dock-w,620px);height:var(--dshp-dock-h,72vh);min-width:min(380px,calc(100vw - 16px));min-height:240px;max-width:calc(100vw - 16px);max-height:calc(100vh - 16px);box-sizing:border-box;background:color-mix(in srgb,var(--dsw-alias-bg-layer-1,var(--dshp-paper,#1c1c1c)) 52%,transparent);backdrop-filter:blur(22px) saturate(1.35);-webkit-backdrop-filter:blur(22px) saturate(1.35);border:1px solid color-mix(in srgb,var(--dsw-alias-border-l1,var(--dshp-line,#555)) 65%,transparent);border-radius:12px;box-shadow:0 18px 48px color-mix(in srgb,#000 30%,transparent),0 0 0 1px color-mix(in srgb,#fff 6%,transparent);pointer-events:auto;color:var(--dsw-alias-label-primary,var(--dshp-ink,#f2f2f2));overflow:visible}
+/* dshgo 手机/桌面 WebView：返回、菜单按钮浮在页面之上，且画在 WebView 之外（z-index 抢不回来）。
+   几何由 appChromeInsets() 让开；这里再兜一层，宿主变量晚到时也不会顶到安全区外。 */
+:root[data-dsh-app-layout] .dshp-dock{max-width:calc(100vw - var(--dsh-app-inset-left,0px) - var(--dsh-app-inset-right,0px) - 16px);max-height:calc(100vh - var(--dsh-app-inset-top,0px) - var(--dsh-app-inset-bottom,0px) - 16px)}
 .dshp-dock[data-open="0"]{display:none}
 .dshp-launch{position:fixed;right:16px;bottom:16px;z-index:10040;appearance:none;display:inline-flex;align-items:center;gap:6px;height:36px;padding:0 14px;border:1px solid color-mix(in srgb,var(--dsw-alias-brand-primary,#6dbf8c) 55%,transparent);border-radius:999px;background:color-mix(in srgb,var(--dsw-alias-bg-layer-1,#1c1c1c) 72%,transparent);color:var(--dsw-alias-label-primary,#f2f2f2);cursor:pointer;font:13px/1 inherit;box-shadow:0 8px 22px color-mix(in srgb,#000 28%,transparent);pointer-events:auto}
 .dshp-launch:hover{border-color:var(--dsw-alias-brand-primary,#6dbf8c);background:color-mix(in srgb,var(--dsw-alias-brand-primary,#6dbf8c) 18%,transparent)}
@@ -1070,7 +1073,7 @@ body:not([data-ds-dark-theme]) .dshp-auth-ops button.primary{background:var(--ds
 .dshp-dock-resize-r{right:-2px;top:0;bottom:22px;width:10px;cursor:ew-resize;background:transparent}
 .dshp-dock-resize-b{left:10px;right:22px;bottom:-2px;height:10px;cursor:ns-resize;background:transparent}
 .dshp-dock-resize-b:hover{background:color-mix(in srgb,var(--dsw-alias-brand-primary,#6dbf8c) 35%,transparent)}
-.dshp-auth-mask{position:fixed;inset:0;z-index:10100;background:rgba(0,0,0,.62);display:flex;align-items:center;justify-content:center;padding:20px;pointer-events:auto}
+.dshp-auth-mask{position:fixed;inset:0;z-index:10100;background:rgba(0,0,0,.62);display:flex;align-items:center;justify-content:center;padding:calc(20px + var(--dsh-app-inset-top,0px)) calc(20px + var(--dsh-app-inset-right,0px)) calc(20px + var(--dsh-app-inset-bottom,0px)) calc(20px + var(--dsh-app-inset-left,0px));pointer-events:auto;overflow:auto}
 .dshp-env-gate{z-index:10200}
 .dshp-auth-modal{width:min(680px,100%);max-height:min(88vh,820px);display:flex;flex-direction:column;gap:10px;padding:16px;border:1px solid var(--dsw-alias-border-l1,#333);border-radius:12px;background:var(--dsw-alias-bg-layer-1,#1a1a1a);color:var(--dsw-alias-label-primary,#eee)}
 .dshp-auth-modal h2{margin:0;font-size:16px;font-weight:600}
@@ -7896,21 +7899,57 @@ body[data-ds-dark-theme] .dshp-rewind-item span{color:var(--dsw-alias-label-tert
 		const DOCK_GEOM_KEY = "dsh-purge-dock-geom-v4";
 		/* 默认停在右上，底边留在输入框上面。拖动之后停在用户松开的位置，只保证不拖出窗口。 */
 		const DOCK_COMPOSER_CLEAR = 172;
+		/* 停靠面板与屏幕边缘、以及宿主顶栏之间的最小间隙。 */
+		const DOCK_EDGE = 8;
+		/*
+		 * dshgo（DSH Go 手机 / 桌面 WebView）把返回、菜单按钮浮在页面上方，并把它们的
+		 * 占位通过 --dsh-app-* 变量交给页面（见 dsh_web_phone.css / web_view_page.dart）：
+		 *   --dsh-app-inset-top    宿主层（对话框、抽屉）可以开始的地方：所有按钮下方
+		 *   --dsh-app-lead-h       按钮自身的底边
+		 *   --dsh-app-status/band  桌面布局的状态栏 + 返回按钮所在的 band
+		 *   --dsh-app-inset-*      安全区
+		 * 官方 Web、桌面浏览器没有这些变量，读出来是 0，停靠面板保持原来的位置。
+		 * 不读它们的话，面板会停在 y=48 顶在返回/菜单图标底下（手机上是右上半屏），
+		 * 而原生按钮画在 WebView 之上，z-index 抢不回来——只能在几何上让开。
+		 */
+		function appChromeInsets() {
+			const zero = { top: 0, right: 0, bottom: 0, left: 0 };
+			if (typeof window === "undefined" || typeof document === "undefined") return zero;
+			let cs = null;
+			try { cs = window.getComputedStyle(document.documentElement); } catch { return zero; }
+			if (!cs) return zero;
+			const num = (name) => {
+				const value = Number.parseFloat(cs.getPropertyValue(name));
+				return Number.isFinite(value) && value > 0 ? value : 0;
+			};
+			return {
+				top: Math.max(num("--dsh-app-inset-top"), num("--dsh-app-lead-h"), num("--dsh-app-status") + num("--dsh-app-band")),
+				right: num("--dsh-app-inset-right"),
+				bottom: num("--dsh-app-inset-bottom"),
+				left: num("--dsh-app-inset-left"),
+			};
+		}
 		function defaultDockGeom() {
 			const vw = typeof window !== "undefined" ? window.innerWidth : 1280;
 			const vh = typeof window !== "undefined" ? window.innerHeight : 800;
-			const w = Math.min(620, Math.max(380, vw - 16));
-			const y = 48;
-			const h = Math.max(240, Math.min(640, vh - y - DOCK_COMPOSER_CLEAR));
-			return { x: Math.max(8, vw - w - 8), y: y, w: w, h: h };
+			const chrome = appChromeInsets();
+			const w = Math.min(620, Math.max(280, vw - chrome.left - chrome.right - DOCK_EDGE * 2));
+			const y = chrome.top + DOCK_EDGE;
+			const h = Math.max(240, Math.min(640, vh - y - chrome.bottom - DOCK_COMPOSER_CLEAR));
+			return { x: Math.max(chrome.left + DOCK_EDGE, vw - chrome.right - w - DOCK_EDGE), y: y, w: w, h: h };
 		}
 		function clampDockGeom(g) {
 			const vw = typeof window !== "undefined" ? window.innerWidth : 1280;
 			const vh = typeof window !== "undefined" ? window.innerHeight : 800;
-			const w = Math.min(Math.max(380, Number(g && g.w) || 620), Math.max(380, vw - 16));
-			const h = Math.min(Math.max(240, Number(g && g.h) || 520), Math.max(240, vh - 16));
-			const x = Math.min(Math.max(8, Number(g && g.x) || 8), Math.max(8, vw - w - 8));
-			const y = Math.min(Math.max(8, Number(g && g.y) || 8), Math.max(8, vh - Math.min(h, vh - 16) - 8));
+			const chrome = appChromeInsets();
+			const minTop = chrome.top + DOCK_EDGE;
+			const minLeft = chrome.left + DOCK_EDGE;
+			const availableW = Math.max(280, vw - chrome.left - chrome.right - DOCK_EDGE * 2);
+			const availableH = Math.max(240, vh - minTop - chrome.bottom - DOCK_EDGE);
+			const w = Math.min(Math.max(380, Number(g && g.w) || 620), availableW);
+			const h = Math.min(Math.max(240, Number(g && g.h) || 520), availableH);
+			const x = Math.min(Math.max(minLeft, Number(g && g.x) || minLeft), Math.max(minLeft, vw - chrome.right - w - DOCK_EDGE));
+			const y = Math.min(Math.max(minTop, Number(g && g.y) || minTop), Math.max(minTop, vh - chrome.bottom - h - DOCK_EDGE));
 			return { x: x, y: y, w: w, h: h };
 		}
 		function loadDockGeom() {
@@ -8465,9 +8504,37 @@ body[data-ds-dark-theme] .dshp-rewind-item span{color:var(--dsw-alias-label-tert
 				if (tag) tag.textContent = ":root{--dshp-dock-w:" + geom.w + "px;--dshp-dock-h:" + geom.h + "px}";
 			}, [geom]);
 			useEffect(() => {
-				const onResize = () => setGeom((g) => clampDockGeom(g));
+				const onResize = () => setGeom((g) => {
+					const next = clampDockGeom(g);
+					if (next.x === g.x && next.y === g.y && next.w === g.w && next.h === g.h) return g;
+					return next;
+				});
 				window.addEventListener("resize", onResize);
-				return () => window.removeEventListener("resize", onResize);
+				/*
+				 * dshgo 的 --dsh-app-* 变量在页面加载后由宿主脚本再写一次，可能晚于本面板
+				 * 首次挂载；布局切换（横竖屏、抽屉/桌面）也会改它们。这里在启动的一小段
+				 * 时间里复核一次几何，变量一变就把面板从返回/菜单按钮下面让开。
+				 */
+				let lastTop = appChromeInsets().top;
+				let ticks = 0;
+				const timer = window.setInterval(() => {
+					ticks += 1;
+					const top = appChromeInsets().top;
+					if (top !== lastTop) {
+						lastTop = top;
+						onResize();
+					}
+					if (ticks >= 20) window.clearInterval(timer);
+				}, 500);
+				const obs = typeof MutationObserver !== "undefined"
+					? new MutationObserver(() => onResize())
+					: null;
+				if (obs) obs.observe(document.documentElement, { attributes: true, attributeFilter: ["data-dsh-app-layout", "style", "class"] });
+				return () => {
+					window.removeEventListener("resize", onResize);
+					window.clearInterval(timer);
+					if (obs) obs.disconnect();
+				};
 			}, []);
 			useEffect(() => {
 				if (st.tab === "drill" && readDrillAuth() && __dshPurgeDrill && __dshPurgeDrill.setUI) {
@@ -8820,6 +8887,8 @@ body[data-ds-dark-theme] .dshp-rewind-item span{color:var(--dsw-alias-label-tert
 		exports.name = name;
 		exports.inject = inject;
 		exports.apply = apply;
+		// 停靠面板几何：宿主（dshgo）的 --dsh-app-* 变量读法与约束，供测试直接驱动。
+		exports.__dockGeometry = { appChromeInsets: appChromeInsets, defaultDockGeom: defaultDockGeom, clampDockGeom: clampDockGeom };
 		return module.exports;
 	}
 });

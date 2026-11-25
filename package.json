@@ -1,7 +1,7 @@
 {
   "name": "dsh-purge",
-  "version": "1.1.73",
-  "description": "DeepSeek Harness 破甲：让所有模型都能破甲，不同模型可换不同提示词；默认提示词面向国模「小码酱」。Jailbreak for every model — swap prompts per model. 求 Star 收藏 ⭐ 如要二开，请查看署名要求部分",
+  "version": "1.1.74",
+  "description": "DeepSeek Harness 鐮寸敳锛氳鎵€鏈夋ā鍨嬮兘鑳界牬鐢诧紝涓嶅悓妯″瀷鍙崲涓嶅悓鎻愮ず璇嶏紱榛樿鎻愮ず璇嶉潰鍚戝浗妯°€屽皬鐮侀叡銆嶃€侸ailbreak for every model 鈥?swap prompts per model. 姹?Star 鏀惰棌 猸?濡傝浜屽紑锛岃鏌ョ湅缃插悕瑕佹眰閮ㄥ垎",
   "type": "module",
   "main": "lib/index.js",
   "exports": {
@@ -9,6 +9,7 @@
       "default": "./lib/index.js"
     },
     "./client": "./client.js",
+    "./presets": "./lib/presets/index.js",
     "./redteam": "./lib/redteam/index.js",
     "./redteam/store": "./lib/redteam/store.js",
     "./redteam/ui": "./lib/redteam/ui.js",
@@ -51,8 +52,8 @@
     "dsh",
     "dsh-plugin",
     "dsh-plugins",
-    "网络安全",
-    "红队评测",
+    "缃戠粶瀹夊叏",
+    "绾㈤槦璇勬祴",
     "llm-security",
     "harness-security",
     "deepseek-harness",
@@ -86,8 +87,8 @@
     },
     "install": {
       "preferred": "tarball",
-      "tarball": "https://github.com/aakk007/dsh-purge/archive/refs/tags/v1.1.73.tar.gz",
-      "zip": "https://github.com/aakk007/dsh-purge/archive/refs/tags/v1.1.73.zip",
+      "tarball": "https://github.com/aakk007/dsh-purge/archive/refs/tags/v1.1.74.tar.gz",
+      "zip": "https://github.com/aakk007/dsh-purge/archive/refs/tags/v1.1.74.zip",
       "git": "https://github.com/aakk007/dsh-purge.git"
     }
   },

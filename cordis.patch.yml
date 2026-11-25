@@ -62,6 +62,11 @@
     - id: dsh-purge-redteam
       name: dsh-purge/redteam
 
+    # 自带 agent 预设：无限制模式（unrestricted）+ 无限制模式（子智能体）
+    # 模式下拉只认 agentPresets.register()，只把文件夹放进 .agent-presets 不会出现。
+    - id: dsh-purge-presets
+      name: dsh-purge/presets
+
     # 演练台事实库（SQLite），数据在 $DSH_HOME/redteam
     - id: dsh-purge-redteam-store
       name: dsh-purge/redteam/store

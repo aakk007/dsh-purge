@@ -1,3 +1,21 @@
+# 1.1.74
+
+## 中文
+
+- 补齐社区版的“无限制模式”：随包 `presets/unrestricted` 由新插件条目 `dsh-purge/presets` 落到 `$DSH_HOME/.agent-presets/unrestricted/` 并注册进 `agentPresets`，模式下拉出现 **无限制模式**（排序 20）与 **无限制模式（子智能体）**。注册时把旧 `toolFilter` 在内存里迁移成独立的执行预设，用户磁盘上的 YAML 不改写；已有用户文件默认不覆盖。
+- 无限制模式的人设只声明“操作者意图优先、不重复声明边界”，工具面与红队模式一致，但不含演练台工具（`redteam-tools` / 锚点门），技能用宿主默认根。日常在模式里选它即可，不需要重建预设。
+- 修 dshgo 网页版遮挡：停靠面板原先固定 `y=48` 贴在右上角，正好压在 DSH Go 的返回/菜单按钮下面（原生按钮画在 WebView 之上，z-index 抢不回来）。现在读取宿主注入的 `--dsh-app-*` 几何（安全区、按钮底边、桌面 band），面板从按钮下方开始，高度与宽度都收在安全区内；官方 Web 与桌面浏览器没有这些变量，位置保持原样。
+- 窄屏不再强制 380px 最小宽度，遮挡层（授权窗、环境适配）也为状态栏和手势条留出内边距。
+- 测试新增 8 项：4 项停靠面板几何（手机 / 桌面 / 无宿主变量 / CSS 约定）、4 项无限制模式预设（解析、落地不覆盖、双预设注册与执行预设无委派、异常配置明确报错）；完整官方 0.2.2-rc.1 Web 宿主集成在同一进程注册红队与无限制两套预设，均无 broken，执行预设不含 subagent/workflow/ralph。Android 真机验收仍由用户完成。
+
+## English
+
+- Port the community "unrestricted mode": the bundled `presets/unrestricted` is installed to `$DSH_HOME/.agent-presets/unrestricted/` by the new `dsh-purge/presets` entry and registered into `agentPresets`, so the mode list shows **无限制模式** and **无限制模式（子智能体）**. The legacy `toolFilter` is translated in memory into a separate worker preset; user YAML on disk is left untouched and existing files are not overwritten.
+- The unrestricted persona only states operator intent first; its tool plane matches the red-team preset minus the drill-only rows, and skills use the host defaults.
+- Fix the dshgo overlay: the dock was pinned at `y=48` in the top-right corner, exactly under DSH Go's native back/menu buttons, which are drawn above the WebView (no z-index can win). It now reads the host's `--dsh-app-*` geometry and starts below those buttons, keeping width and height inside the safe area; official Web and desktop browsers have no such variables and keep the previous position.
+- Narrow screens no longer force a 380px minimum width, and the dock's modal layers pad for the status and gesture bars.
+- Eight new tests cover the dock geometry and the unrestricted preset (parse, install without overwrite, dual-preset registration, explicit failure on unknown legacy filters). The full official 0.2.2-rc.1 Web host registers both preset families unbroken with no delegation tools in the worker. Android device acceptance remains with the user.
+
 # 1.1.73
 
 ## 中文

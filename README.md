@@ -4,13 +4,15 @@
 
 <h1 align="center">⚔️ DeepSeek Harness cybersecurity red-team tool (dsh-purge)</h1>
 
-<p align="center"><strong>Version 1.1.73</strong></p>
+<p align="center"><strong>Version 1.1.74</strong></p>
+
+> **1.1.74 adds “unrestricted mode” and fixes the dshgo overlay:** the mode list now offers **无限制模式** and **无限制模式（子智能体）** (bundled preset installed to disk and registered into `agentPresets`; user files are not overwritten), and the plugin panel no longer sits under DSH Go's back/menu buttons. Refresh the existing plugin source to update. See [scope and verification](docs/dsh-go-compat.md).
 
 > **Included in 1.1.73:** community backup, rollback, update-integrity and preset-migration support, retaining the existing mobile compatibility and UI. Refresh the existing plugin source to update from `.4`. See [scope, verification and release status](docs/community-maintenance-integration.md).
 
 > **refusalRetry:** the community detector and retry ladder are included in `.5`, disabled by default. Updating does not automatically enable them. See [configuration, tests and rollback](docs/refusal-retry-integration.md).
 
-> **DSH Go 1.3.0 mobile validation build (aakk007 fork):** refresh this fork's [plugin index](https://raw.githubusercontent.com/aakk007/dsh-purge/master/index.json) and update, or download the [fork release](https://github.com/aakk007/dsh-purge/releases/tag/v1.1.73). Start the updated plugin; restart the engine if the old plugin is still running. This build fixes `toolFilter is no longer supported` by translating the bundled legacy child configuration into an independent worker `agentPreset` with no further delegation tools. User preset files and the host `/list-agents` export repair are preserved. Both complete presets load in the official 0.2.2-rc.1 Web host; phone validation remains pending. See [installation and rollback](docs/dsh-go-compat.md). The original npm/upstream links below do not contain this fork's fix.
+> **DSH Go 1.3.0 mobile validation build (aakk007 fork):** refresh this fork's [plugin index](https://raw.githubusercontent.com/aakk007/dsh-purge/master/index.json) and update, or download the [fork release](https://github.com/aakk007/dsh-purge/releases/tag/v1.1.74). Start the updated plugin; restart the engine if the old plugin is still running. This build fixes `toolFilter is no longer supported` by translating the bundled legacy child configuration into an independent worker `agentPreset` with no further delegation tools. User preset files and the host `/list-agents` export repair are preserved. Both complete presets load in the official 0.2.2-rc.1 Web host; phone validation remains pending. See [installation and rollback](docs/dsh-go-compat.md). The original npm/upstream links below do not contain this fork's fix.
 
 <p align="center">
   <em>DeepSeek Harness jailbreak: every model, swap prompts per model. Default prompt for 小码酱. Please star ⭐ If you build on this, see Attribution required.</em>
