@@ -39,12 +39,13 @@ async function officialSelector() {
 
 test('复现截图：旧稳定版与较新预发布版共存时，官方页面仍默认选 1.1.71', options, async () => {
   const { parseMarketIndex, listingOf } = await officialSelector();
+  // 固定一组「旧稳定版 + 新预发布版」，不依赖当前索引里的发行版本号。
   const previous = structuredClone(rawIndex);
-  previous.plugins[0].versions.push({
-    version: '1.1.71',
-    publishTimestamp: 1791869432,
-    source: { type: 'git', url: 'https://github.com/aakk007/dsh-purge.git', commit: '033e6bd1e0f101352b39075ecd0d758ffef26b76' },
-  });
+  const source = { type: 'git', url: 'https://github.com/aakk007/dsh-purge.git', commit: '033e6bd1e0f101352b39075ecd0d758ffef26b76' };
+  previous.plugins[0].versions = [
+    { version: '1.1.72-dshgo.5', publishTimestamp: 1795586654, source },
+    { version: '1.1.71', publishTimestamp: 1791869432, source },
+  ];
   const listing = listingOf(parseMarketIndex(previous, indexUrl).plugins[0], [], {}, '0.2.2-rc.1');
   assert.equal(listing.defaultVersion, '1.1.71');
 });
