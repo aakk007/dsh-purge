@@ -1,12 +1,12 @@
 # DSH Go 1.3.0 兼容修复 / Compatibility fix
 
-当前分支版本：`1.1.72-dshgo.5`；本文记录 `.4` 引入并在 `.5` 保留的手机兼容修复。`.5` 另外包含维护模块及默认关闭的 refusalRetry。原作者为 YuJunZhiXue，原包基线为 `1.1.71`。
+当前分支版本：`1.1.73`；本文记录 `.4` 引入并在 `.5` 保留的手机兼容修复。`.5` 另外包含维护模块及默认关闭的 refusalRetry。原作者为 YuJunZhiXue，原包基线为 `1.1.71`。
 
 ## 手机安装
 
 1. 在 DSH Go 的自定义插件源中刷新本仓库的 `index.json`：
    `https://raw.githubusercontent.com/aakk007/dsh-purge/master/index.json`。
-2. 更新 dsh-purge，确认“已安装”中的版本为 `1.1.72-dshgo.5`。也可从本仓库对应 GitHub Release 下载完整插件包。
+2. 更新 dsh-purge，确认“已安装”中的版本为 `1.1.73`。也可从本仓库对应 GitHub Release 下载完整插件包。
 3. 让新版插件启动；若更新后仍在运行旧插件，停止并启动一次内置引擎。本版同时补回磁盘导出和当前进程解析，不再要求补盘后再额外启动一次。
 4. 打开原来的“红队模式”预设，确认没有 `tool-subagent-list-agents ... never started` 或 `toolFilter is no longer supported`。模式列表新增的“红队执行模式（子智能体）”供指挥自动派活使用，日常仍选“红队模式”。
 
@@ -67,7 +67,7 @@ DSH_FULL_TEST_PREFIX=/absolute/isolated-dsh-npm-prefix npm run test:full-preset-
 
 ## English
 
-Refresh this fork's custom plugin index, verify installed version `1.1.72-dshgo.5`, then start the updated plugin. Version `.5` retains the `.4` mobile fixes and includes maintenance modules and opt-in refusalRetry. Restart the embedded engine if the old plugin is still running. Open the existing red-team preset to verify it loads. No preset recreation or APK replacement is required.
+Refresh this fork's custom plugin index, verify installed version `1.1.73`, then start the updated plugin. Version `.5` retains the `.4` mobile fixes and includes maintenance modules and opt-in refusalRetry. Restart the embedded engine if the old plugin is still running. Open the existing red-team preset to verify it loads. No preset recreation or APK replacement is required.
 
 The Web Discover page prefers stable versions. Listing the old stable `1.1.71` alongside the fix made it select the old version. The installation index now lists only the fix; the baseline remains available through its GitHub rollback tag. Regression tests run the official `0.2.2-rc.1` selection function.
 
