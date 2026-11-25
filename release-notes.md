@@ -1,3 +1,19 @@
+# 1.1.75
+
+## 中文
+
+- 修复 1.1.74 发布时 `package.json` 的描述与关键词被二次编码（UTF-8 被当成 GBK 读、再按 UTF-8 写回），插件详情页因此显示成「鐮寸敳锛氳…」这类乱码。1.1.75 恢复原文描述；功能与 1.1.74 相同，已装 1.1.74 一切正常，只是详情页文案坏了。
+- 新增清单回归测试（`tests/package-manifest.test.mjs`）：描述与关键词必须是干净 UTF-8（含「破甲」「小码酱」），不得带 BOM 或二次编码片段；索引版本、Git tag 安装地址必须与 `package.json` 版本一致。发版流程里再出现同类编码错误会直接测试失败。
+- 插件源条目补上中英文描述，发现页不再只显示名字。
+- 升级：刷新插件源更新到 `1.1.75`，停掉再启动一次内置引擎。模式列表、无限制模式预设与 1.1.74 的遮挡修复都不变。
+
+## English
+
+- Fix the `package.json` description and keywords of 1.1.74 being double-encoded (UTF-8 read as GBK, written back as UTF-8), which showed up as mojibake on the plugin detail page. 1.1.75 restores the original text; behaviour is identical to 1.1.74.
+- Add a manifest regression test: the description and keywords must be clean UTF-8 (no BOM, no double-encoded fragments), and the index version plus the Git tag install URLs must match `package.json`. The same encoding mistake now fails the test instead of shipping.
+- The index entry now carries a bilingual description.
+- Update to `1.1.75`, then restart the embedded engine. The mode list, the unrestricted preset and the 1.1.74 overlay fix are unchanged.
+
 # 1.1.74
 
 ## 中文

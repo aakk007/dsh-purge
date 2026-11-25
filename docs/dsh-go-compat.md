@@ -1,6 +1,6 @@
 # DSH Go 1.3.0 兼容修复 / Compatibility fix
 
-当前分支版本：`1.1.74`；本文记录 `.4` 引入并在 `.5` 保留的手机兼容修复，以及 `1.1.74` 新增的“无限制模式”与 dshgo 网页版遮挡修复。原作者为 YuJunZhiXue，原包基线为 `1.1.71`。
+当前分支版本：`1.1.75`；本文记录 `.4` 引入并在 `.5` 保留的手机兼容修复，`1.1.74` 新增的“无限制模式”与 dshgo 网页版遮挡修复，以及 `1.1.75` 对插件详情页乱码描述的修复。原作者为 YuJunZhiXue，原包基线为 `1.1.71`。
 
 ## 手机安装
 
@@ -92,7 +92,7 @@ DSH_FULL_TEST_PREFIX=/absolute/isolated-dsh-npm-prefix npm run test:full-preset-
 
 ## English
 
-Refresh this fork's custom plugin index, verify installed version `1.1.74`, then start the updated plugin. Version `1.1.74` adds the unrestricted mode (two registry rows) and keeps the `.4` mobile fixes, maintenance modules and opt-in refusalRetry. Restart the embedded engine if the old plugin is still running. The mode list should show “无限制模式” and “无限制模式（子智能体）”; `$DSH_HOME/dsh-purge/unrestricted-preset.json` records the registration phase. The dock panel now clears DSH Go's back/menu buttons by reading the injected `--dsh-app-*` geometry, so it no longer sits under the native controls. No preset recreation or APK replacement is required.
+Refresh this fork's custom plugin index, verify installed version `1.1.75`, then start the updated plugin. Version `1.1.75` restores the `package.json` description that 1.1.74 shipped double-encoded (the detail page showed mojibake) and adds a manifest regression test; the unrestricted mode (two registry rows), the dock overlay fix, the `.4` mobile fixes, maintenance modules and opt-in refusalRetry are unchanged. Restart the embedded engine if the old plugin is still running. The mode list should show “无限制模式” and “无限制模式（子智能体）”; `$DSH_HOME/dsh-purge/unrestricted-preset.json` records the registration phase. No preset recreation or APK replacement is required.
 
 The Web Discover page prefers stable versions. Listing the old stable `1.1.71` alongside the fix made it select the old version. The installation index now lists only the fix; the baseline remains available through its GitHub rollback tag. Regression tests run the official `0.2.2-rc.1` selection function.
 
