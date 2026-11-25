@@ -2,6 +2,8 @@
 
 ## aakk007 分支变更 / Fork changes
 
+2026-11-25：按模块移植 kingcharleslzy-ai/dsh-purge 社区版 `e519253` 的通用维护基础设施，并接入原分支；保留原手机兼容及其他功能。来源、适配改动与验证范围见 `docs/community-maintenance-integration.md`。该整合为未发版源码，不代表旧 Release 标签内容改变。社区作者及贡献者的 MIT 权利和署名保留。
+
 2026-11-24：本分支新增 DSH Go 自定义插件源及 `1.1.72-dshgo.4` 兼容补丁，恢复 DSH `0.2.2-rc.1` 的旧 `/list-agents` 导出，修正 Direct 路径与当前进程的导出缓存兼容，并在注册时将随包旧子智能体配置迁移到独立执行预设。原作者、来源及许可证保留。下文“未修改”“唯一差异”等描述是原镜像备份时的历史记录，不代表本分支当前状态。变更范围见 `docs/dsh-go-compat.md`。
 
 This fork adds a DSH Go plugin index and the `1.1.72-dshgo.4` compatibility fix, including Direct paths, live export resolution and in-memory migration of bundled legacy delegation settings to a worker preset. Original attribution and licensing are retained. The unchanged-mirror claims below describe the historical capture, not this modified fork.

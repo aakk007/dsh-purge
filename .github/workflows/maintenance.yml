@@ -1,0 +1,29 @@
+name: Maintenance compatibility
+on:
+  push:
+    branches: [master, 'integrate/**']
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  test:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+        node: [18, 24]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+          cache: npm
+      - run: npm ci --ignore-scripts --no-audit --no-fund
+      - run: npm run test:maintenance
+      - run: npm run test:maintenance-ui
+      - run: npm run check:maintenance-client
+      - run: node --check client.js
+      - run: node --input-type=module -e "await import('./lib/index.js')"
+      - run: node --test tests/subagent-presets.test.mjs
+      - run: npm pack --ignore-scripts --dry-run

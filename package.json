@@ -38,6 +38,10 @@
   "scripts": {
     "embed-prompt": "node scripts/embed-default-prompt.mjs",
     "build:client": "node scripts/build-client.mjs",
+    "build:maintenance-client": "node scripts/build-maintenance-client.mjs",
+    "check:maintenance-client": "node scripts/build-maintenance-client.mjs --check",
+    "test:maintenance": "node --test tests/maintenance.test.mjs tests/update-integrity.test.mjs tests/update-zip.test.mjs tests/migration-backup.test.mjs tests/preset-adapter.test.mjs tests/profile-source.test.mjs",
+    "test:maintenance-ui": "node --test tests/maintenance-ui.test.mjs",
     "test:host-compat": "node --test tests/host-compat.test.mjs tests/subagent-presets.test.mjs",
     "test:full-preset-compat": "node --expose-internals --test tests/full-preset-compat.test.mjs"
   },
@@ -91,6 +95,11 @@
   },
   "peerDependencies": {
     "@deepseek-ai/cordis": "^4.0.1"
+  },
+  "devDependencies": {
+    "jsdom": "26.1.0",
+    "react": "19.1.1",
+    "react-dom": "19.1.1"
   },
   "engines": {
     "node": ">=18"
