@@ -17,9 +17,18 @@
 
 ## 手机安装
 
-1. 在 DSH Go 的自定义插件源中刷新本仓库的 `index.json`：
-   `https://raw.githubusercontent.com/aakk007/dsh-purge/master/index.json`。
-2. 更新 dsh-purge，确认“已安装”中的版本为 `1.1.73`。也可从本仓库对应 GitHub Release 下载完整插件包。
+1. 在 DSH Go 的自定义插件源中刷新本仓库的 `index.json`（任选一个能打开的地址）：
+
+   | 地址 | 说明 |
+   | --- | --- |
+   | `https://raw.githubusercontent.com/aakk007/dsh-purge/master/index.json` | 原始地址，国内常被墙或限流 |
+   | `https://cdn.jsdelivr.net/gh/aakk007/dsh-purge@master/index.json` | jsDelivr，国内一般可达 |
+   | `https://fastly.jsdelivr.net/gh/aakk007/dsh-purge@master/index.json` | jsDelivr 备用节点 |
+   | `https://gcore.jsdelivr.net/gh/aakk007/dsh-purge@master/index.json` | jsDelivr 备用节点 |
+   | `https://ghproxy.net/https://raw.githubusercontent.com/aakk007/dsh-purge/master/index.json` | GitHub 代理 |
+
+   刷新后显示「无法读取此索引」时，是**拉取失败**（网络/代理/超时），不是格式错误：格式不对会显示「此索引的格式无效」。换一个上表地址重试即可；索引格式本身已用官方 `dsh-plugin-market-index@0.2.2-rc.1` 的解析器验证。源地址里不要带 `?t=` 之类的查询串。
+2. 更新 dsh-purge，确认“已安装”中的版本为 `1.1.76`。也可从本仓库对应 GitHub Release 下载完整插件包。
 3. 让新版插件启动；若更新后仍在运行旧插件，停止并启动一次内置引擎。本版同时补回磁盘导出和当前进程解析，不再要求补盘后再额外启动一次。
 4. 打开原来的“红队模式”预设，确认没有 `tool-subagent-list-agents ... never started` 或 `toolFilter is no longer supported`。模式列表新增的“红队执行模式（子智能体）”供指挥自动派活使用，日常仍选“红队模式”。
 5. 模式列表里应同时出现“无限制模式”和“无限制模式（子智能体）”。没有的话看 `$DSH_HOME/dsh-purge/unrestricted-preset.json` 的 `phase`：`waiting-registry` 是 registry 还没起（重启内置引擎），`registered-broken` 的 `broken` 字段写着哪一行挂载失败。
