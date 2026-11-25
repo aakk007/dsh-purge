@@ -47,7 +47,8 @@ test('apply() 注册设置入口与插件详情配置区，更新按钮所在的
 
   const byName = (name) => registered.filter((entry) => entry.metadata.name === name);
   assert.deepEqual(injected.sort(), [
-    'plugins.bundle.config', 'plugins.row.config', 'settings.section', 'shell.overlay',
+    'main', 'plugins.bundle.config', 'plugins.row.config', 'settings.section',
+    'shell.overlay', 'sidebar.panellist',
   ]);
 
   const dock = byName('shell.overlay');
@@ -69,6 +70,21 @@ test('apply() 注册设置入口与插件详情配置区，更新按钮所在的
   const row = byName('plugins.row.config');
   assert.equal(row.length, 1);
   assert.equal(row[0].metadata.key, 'dsh-purge#dsh-purge');
+
+  // 侧栏「全部功能」入口 + 它打开的整页：id 与 main 的 key 必须一致。
+  const panel = byName('sidebar.panellist');
+  assert.equal(panel.length, 1, '侧栏必须有 dsh-purge 入口');
+  assert.equal(panel[0].metadata.id, 'dsh-purge');
+  assert.equal(panel[0].metadata.label(), 'settings.nav');
+  const icon = renderToStaticMarkup(React.createElement(panel[0].component, { size: 18 }));
+  assert.match(icon, /^<svg/);
+  assert.match(icon, /width="18"/);
+
+  const main = byName('main');
+  assert.equal(main.length, 1);
+  assert.equal(main[0].metadata.key, panel[0].metadata.id, 'main 的 key 必须等于侧栏入口 id');
+  const mainHtml = renderToStaticMarkup(React.createElement(main[0].component, { t: (key) => key }));
+  assert.match(mainHtml, /dshp-root/);
 
   for (const entry of [settings[0], bundle[0], row[0]]) {
     assert.equal(typeof entry.component, 'function');

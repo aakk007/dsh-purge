@@ -1,6 +1,6 @@
 # DSH Go 1.3.0 兼容修复 / Compatibility fix
 
-当前分支版本：`1.1.77`；本文记录 `.4` 引入并在 `.5` 保留的手机兼容修复，`1.1.74` 的“无限制模式”与 dshgo 网页版遮挡修复，`1.1.75` 对插件详情页乱码描述的修复，`1.1.76` 补回的设置入口与更新按钮，以及 `1.1.77` 把设置节改名为 `dsh-purge`。原作者为 YuJunZhiXue，原包基线为 `1.1.71`。
+当前分支版本：`1.1.78`；本文记录 `.4` 引入并在 `.5` 保留的手机兼容修复，`1.1.74` 的“无限制模式”与 dshgo 网页版遮挡修复，`1.1.75` 对插件详情页乱码描述的修复，`1.1.76` 补回的设置入口与更新按钮，`1.1.77` 设置节改名 `dsh-purge`，以及 `1.1.78` 新增的侧栏「全部功能」入口。原作者为 YuJunZhiXue，原包基线为 `1.1.71`。
 
 ## 设置入口、更新按钮与插件详情配置（1.1.76）
 
@@ -11,6 +11,7 @@
 | `settings.section`（id `dsh-purge`，order 40，label 取 `settings.nav` = `dsh-purge`） | DSH 设置 → dsh-purge（导航末尾） | 破甲控制面（版本通道 + 检查更新 / 立即更新）、规则集、技能库 |
 | `plugins.bundle.config`（key `dsh-purge`） | 插件 → dsh-purge 详情页 | 同一页设置 |
 | `plugins.row.config`（key `dsh-purge#dsh-purge`） | 插件列表行 | 同一页设置；`view: "summary"` 只回一行 `dsh-purge` |
+| `sidebar.panellist`（id `dsh-purge`，order 30）+ `main`（key `dsh-purge`） | 侧栏「全部功能 / 面板列表」 | 图标 + 整页（与设置页同一份内容） |
 | `shell.overlay`（id `dsh-purge-dock`） | 悬浮面板 | 清洗 / 备份与维护 / 演练台 |
 
 更新按钮不需要新接口：`GET /dsh-purge/update` 返回当前版本、通道与可选版本，`POST /dsh-purge/update` 接受 `op: apply | switch | channel | auto`，更新完按宿主决定重载页面或重启。四个槽位名已在本机宿主客户端里核对存在；注册失败只记日志，不影响其余入口。
@@ -28,7 +29,7 @@
    | `https://ghproxy.net/https://raw.githubusercontent.com/aakk007/dsh-purge/master/index.json` | GitHub 代理 |
 
    刷新后显示「无法读取此索引」时，是**拉取失败**（网络/代理/超时），不是格式错误：格式不对会显示「此索引的格式无效」。换一个上表地址重试即可；索引格式本身已用官方 `dsh-plugin-market-index@0.2.2-rc.1` 的解析器验证。源地址里不要带 `?t=` 之类的查询串。
-2. 更新 dsh-purge，确认“已安装”中的版本为 `1.1.77`。也可从本仓库对应 GitHub Release 下载完整插件包。
+2. 更新 dsh-purge，确认“已安装”中的版本为 `1.1.78`。也可从本仓库对应 GitHub Release 下载完整插件包。
 3. 让新版插件启动；若更新后仍在运行旧插件，停止并启动一次内置引擎。本版同时补回磁盘导出和当前进程解析，不再要求补盘后再额外启动一次。
 4. 打开原来的“红队模式”预设，确认没有 `tool-subagent-list-agents ... never started` 或 `toolFilter is no longer supported`。模式列表新增的“红队执行模式（子智能体）”供指挥自动派活使用，日常仍选“红队模式”。
 5. 模式列表里应同时出现“无限制模式”和“无限制模式（子智能体）”。没有的话看 `$DSH_HOME/dsh-purge/unrestricted-preset.json` 的 `phase`：`waiting-registry` 是 registry 还没起（重启内置引擎），`registered-broken` 的 `broken` 字段写着哪一行挂载失败。
@@ -114,7 +115,7 @@ DSH_FULL_TEST_PREFIX=/absolute/isolated-dsh-npm-prefix npm run test:full-preset-
 
 ## English
 
-Refresh this fork's custom plugin index, verify installed version `1.1.77`, then start the updated plugin. Version `1.1.77` labels the settings section **dsh-purge** (key `settings.nav`) instead of the legacy “Rules”, so it is findable at the end of the Settings nav; `1.1.76` had already restored that `settings.section` plus `plugins.bundle.config` / `plugins.row.config`, which open the same page (version channels with check/update, rules, skills) from the plugin detail sheet and its list row, with the dock kept as a shortcut. `1.1.75` restored the `package.json` description that 1.1.74 shipped double-encoded, and `1.1.74` added the unrestricted mode (two registry rows) and the dock overlay fix. Restart the embedded engine if the old plugin is still running. The mode list should show “无限制模式” and “无限制模式（子智能体）”; `$DSH_HOME/dsh-purge/unrestricted-preset.json` records the registration phase. No preset recreation or APK replacement is required.
+Refresh this fork's custom plugin index, verify installed version `1.1.78`, then start the updated plugin. Version `1.1.78` adds the web sidebar entry (`sidebar.panellist` id `dsh-purge` + `main` key `dsh-purge`), which opens the same page as Settings → dsh-purge (version channels with check/update, rules, skills); `1.1.77` labelled that settings section **dsh-purge**, and `1.1.76` restored it together with `plugins.bundle.config` / `plugins.row.config` while keeping the dock as a shortcut. `1.1.75` restored the `package.json` description that 1.1.74 shipped double-encoded, and `1.1.74` added the unrestricted mode (two registry rows) and the dock overlay fix. Restart the embedded engine if the old plugin is still running. The mode list should show “无限制模式” and “无限制模式（子智能体）”; `$DSH_HOME/dsh-purge/unrestricted-preset.json` records the registration phase. No preset recreation or APK replacement is required.
 
 The Web Discover page prefers stable versions. Listing the old stable `1.1.71` alongside the fix made it select the old version. The installation index now lists only the fix; the baseline remains available through its GitHub rollback tag. Regression tests run the official `0.2.2-rc.1` selection function.
 

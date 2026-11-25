@@ -1,3 +1,17 @@
+# 1.1.78
+
+## 中文
+
+- 网页版侧栏「全部功能 / 面板列表」加入 **dsh-purge** 入口，和社区版同款：`sidebar.panellist`（id `dsh-purge`，order 30，label 取 `settings.nav`）配 `main`（key `dsh-purge`）。点图标直接在对话区打开整页，内容与设置页相同：版本通道（检测更新 / 更新）、规则集、技能库。
+- 入口汇总：侧栏图标 · 设置 → dsh-purge · 插件详情页「配置」 · 插件列表行配置 · 右下角悬浮面板（清洗 / 备份与维护 / 演练台）。四类注册互不依赖，某一处槽位缺失只记日志。
+- 测试：`client-slots` 现在断言 6 个槽位（`shell.overlay` / `settings.section` / `plugins.bundle.config` / `plugins.row.config` / `main` / `sidebar.panellist`），侧栏图标渲染成 `<svg>`、`main` 的 key 与侧栏 id 一致。
+
+## English
+
+- Add a **dsh-purge** row to the web sidebar's “all features / panel list”, the way the community build does: `sidebar.panellist` (id `dsh-purge`, order 30, label from `settings.nav`) paired with `main` (key `dsh-purge`). The icon opens the same full page in the main area: version channels (check update / update), rules, skills.
+- Entries now: sidebar icon, Settings → dsh-purge, plugin detail config, plugin list row config, and the floating dock (clean / maintenance / drill). The registrations are independent; a missing slot only logs.
+- Tests assert all six slots, that the sidebar icon renders an `<svg>`, and that `main`'s key equals the sidebar id.
+
 # 1.1.77
 
 ## 中文

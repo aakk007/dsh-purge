@@ -412,6 +412,17 @@ const newApply = `		// 设置入口：DSH 设置 → dsh-purge，以及插件/ b
 			if (props && props.view === "summary") return h("span", null, "dsh-purge");
 			return h("div", { className: "dshp-settings-page" }, h(SettingsRoot, props));
 		}
+		// 侧栏「全部功能」入口图标；点它打开 main 里 key 相同的页面。
+		function PurgePanelIcon(props) {
+			const size = Number(props && props.size) || 20;
+			return h("svg", {
+				width: size, height: size, viewBox: "0 0 24 24", fill: "none",
+				stroke: "currentColor", strokeWidth: 1.7, strokeLinecap: "round", strokeLinejoin: "round",
+				"aria-hidden": "true",
+			},
+				h("path", { d: "M12 3.2 18.6 6v5.6c0 3.8-2.7 6.8-6.6 8.6-3.9-1.8-6.6-4.8-6.6-8.6V6L12 3.2Z" }),
+				h("path", { d: "M9.4 12.1l1.9 1.9 3.5-3.7" }));
+		}
 		function registerSettingsEntry(ctx, slot, metadata) {
 			try {
 				ctx.slots.inject(slot, () => ctx.slots.register(metadata, SettingsPage));
@@ -447,6 +458,19 @@ const newApply = `		// 设置入口：DSH 设置 → dsh-purge，以及插件/ b
 				key: "dsh-purge#dsh-purge",
 				inject: () => ({ t }),
 			});
+			ctx.slots.inject("main", () => ctx.slots.register({
+				name: "main",
+				key: "dsh-purge",
+				locale: NS,
+				inject: () => ({ t }),
+			}, SettingsPage));
+			ctx.slots.inject("sidebar.panellist", () => ctx.slots.register({
+				name: "sidebar.panellist",
+				id: "dsh-purge",
+				order: 30,
+				label: () => t("settings.nav"),
+				locale: NS,
+			}, PurgePanelIcon));
 			try {
 				if (typeof ctx.inject === "function") {
 					ctx.inject(["sessions", "uiWorkspace", "workspaces", "conversation"], (host) => installRewindUi(host));
