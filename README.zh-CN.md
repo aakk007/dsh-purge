@@ -8,6 +8,8 @@
 
 > **未发版的维护模块整合**：当前分支已选择性合入社区备份回滚、更新校验及配置迁移能力，保留手机兼容和原界面，新增“备份与维护”页。[范围、验证和发布状态](docs/community-maintenance-integration.md)。已有插件源与 Release 标签仍指向原发布版本。
 
+> **未发版的 refusalRetry 整合**：已接入社区检测器与重试阶梯，默认关闭。[配置、测试与回滚](docs/refusal-retry-integration.md)。
+
 > **DSH Go 1.3.0 手机验证版（aakk007 分支）**：通过本仓库的 [插件源 index.json](https://raw.githubusercontent.com/aakk007/dsh-purge/master/index.json) 刷新并更新插件，或从 [本分支 Release](https://github.com/aakk007/dsh-purge/releases/tag/v1.1.72-dshgo.4) 下载。让新版插件启动；若仍运行旧插件，重启一次内置引擎。本版修复 `toolFilter is no longer supported`：注册时将随包旧子智能体配置转换为新版 `agentPreset`，生成无后续委派入口的“红队执行模式（子智能体）”，保留用户预设文件。继续保留宿主 `/list-agents` 导出修复。整套预设已在官方 0.2.2-rc.1 Web 宿主加载通过，手机验证待完成。[修复范围、安装及回滚说明](docs/dsh-go-compat.md)。下方原作者的 npm／上游下载链接不包含本分支修复。
 
 <p align="center">

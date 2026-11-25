@@ -36,6 +36,7 @@
     "LICENSE"
   ],
   "scripts": {
+    "test:refusal-retry": "node --test tests/refusal-*.test.mjs",
     "embed-prompt": "node scripts/embed-default-prompt.mjs",
     "build:client": "node scripts/build-client.mjs",
     "build:maintenance-client": "node scripts/build-maintenance-client.mjs",

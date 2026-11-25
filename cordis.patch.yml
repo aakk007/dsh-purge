@@ -49,6 +49,9 @@
         postPromptOrder: 5100
         autoRetry: true
         retryMax: 3
+        refusalRetry: false
+        refusalSeed: true
+        refusalDecompose: true
         autoContinue: false
         continueMax: 3
         continueText: "继续"
